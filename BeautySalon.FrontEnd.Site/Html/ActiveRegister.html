@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員驗證</title>
+    <link rel="stylesheet" href="../Css/ActiveRegister.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="main-content">
+            <h2 id="statusTitle">會員驗證中...</h2>
+            <p id="statusMessage">正在處理您的會員驗證，請稍候...</p>
+            <a href="HomePage.html" class="home-btn" style="display: none;" id="homeButton">前往首頁</a>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        //獲取url
+        const urlParams = new URLSearchParams(window.location.search);
+        const memberId = urlParams.get('memberId');
+        const confirmCode = urlParams.get('confirmCode');
+        console.log("query string info;", memberId, confirmCode);
+
+        if (!memberId || !confirmCode) {
+            updateStatus('驗證失敗', '無效的驗證連結。', true);
+            return;
+        }
+
+
+        // 调用 ActiveRegister API
+        fetch('/api/MembersApi/ActiveRegister', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ memberId: parseInt(memberId), confirmCode })
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            return response.text().then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error('Error parsing JSON:', text);
+                    throw new Error('Invalid JSON response');
+                }
+            });
+        })
+        .then(data => {
+            if (data.Success) {
+                updateStatus('會員驗證成功', '您的會員資格已成功啟用。請點擊下方按鈕，前往首頁登入。', true);
+            } else {
+                updateStatus('驗證失敗', data.Message || '驗證過程中發生錯誤，請稍後再試。', true);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            updateStatus('驗證失敗', '驗證過程中發生錯誤，請稍後再試。', true);
+        });
+    });
+
+    function updateStatus(title, message, showButton) {
+        document.getElementById('statusTitle').textContent = title;
+        document.getElementById('statusMessage').textContent = message;
+        if (showButton) {
+            document.getElementById('homeButton').style.display = 'inline-block';
+        }
+    }
+    </script>
+</body>
+</html>

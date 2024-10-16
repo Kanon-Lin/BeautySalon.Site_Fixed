@@ -1,0 +1,198 @@
+﻿@model BeautySalon.Backstage.Site.Models.ViewModels.EmployeeSkillVm
+
+
+@{
+    ViewBag.Title = "員工技能";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<title>@ViewBag.Title</title>
+    <style>
+        ul.dropdown-menu.show {
+            margin-top: 8px;
+            border: none;
+            border-radius: 0px;
+            background-color: rgb(197,207,178,1);
+        }
+
+        /* 下拉菜單 */
+        .dropdown-menu {
+            background-color: #C5CFB2;
+            padding: 0px;
+            margin: 7px 5px 5px 5px;
+            position: static;
+            top: 90%;
+            left: 0;
+            min-width: 110px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 下拉菜單項目 */
+        .dropdown-item {
+            color: #64695B;
+            font-weight: bold;
+            padding: 10px;
+            font-size: medium;
+            display: block;
+            margin: 1px;
+            width: 90%;
+        }
+
+            .dropdown-item:hover {
+                background-color: rgb(165, 173, 149,0.5);
+                border-radius: 20px;
+            }
+        .main {
+            padding: 30px !important;
+            border-radius: 18px !important;
+            /*background-color: rgba(241, 243, 236, 0.7) !important;*/
+            background-color: #FAF4E3;
+        }
+
+        h3 {
+            margin: 10px;
+            padding: 10px 0 0 0 !important;
+            font-weight: bold !important;
+            text-align: center;
+            color: #776B5D !important;
+        }
+
+        .btnbox {
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: flex-end;
+            height: 60px;
+        }
+
+        .btn {
+            background-color: rgb(133,139,120,0.5) !important;
+            color: #fefefe !important;
+            border-radius: 10px !important;
+            margin: 15px;
+            font-weight: bold !important;
+        }
+
+        .row {
+            margin: 25px 25px 5px 25px !important;
+            /*background-color: rgba(241, 243, 236, 0.3) !important;*/
+            border-radius: 18px;
+            font-weight: bold;
+            padding: 25px 15px 0px 30px;
+        }
+
+        .nickname {
+            color: rgb(96,63,38,0.8);
+            margin-bottom: 20px !important;
+            font-weight: bold;
+            white-space: nowrap; /* 確保標籤文字不換行 */
+            display: inline-flex; /* 使用彈性盒模型對齊內容 */
+            align-items: center; /* 垂直置中 */
+        }
+
+        .skill {
+            color: rgb(96,63,38,0.8);
+            margin-bottom: 20px !important;
+            font-weight: bold;
+            /*min-width: 80px;*/
+            /*width: 100%;*/
+        }
+
+        label {
+            white-space: nowrap;
+        }
+
+
+        .form-control[disabled] {
+            background-color: whitesmoke;
+            color: #A0937D !important;
+            opacity: 1; /* 不透明 */
+            max-width: 100%;
+            width: 100%;
+            min-width: 250px !important;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 10px; /* 圓角邊框 */
+        }
+
+        .checkbox {
+            display: inline-block; /* 允許勾選框在一行內顯示 */
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-input {
+            display: none;
+        }
+
+
+
+        /* 自定義勾選框 */
+        .custom-checkbox {
+            display: inline-block !important;
+            width: 17px; /* 自定義勾選框的寬度 */
+            height: 17px; /* 自定義勾選框的高度 */
+            border: 2px solid #ccc; /* 邊框顏色 */
+            border-radius: 10px; /* 圓角邊框 */
+            margin-right: 4px; /* 與文本的距離 */
+            vertical-align: middle; /* 垂直對齊 */
+            transition: background-color 0.3s, border-color 0.3s; /* 過渡效果 */
+            background-color: ghostwhite; /* 未勾選的背景顏色 */
+        }
+
+        /* 勾選時的樣式 */
+        .checkbox-input:checked + .custom-checkbox {
+            background-color: #858B78; /* 勾選後的背景顏色 */
+            border-color: #CDD5C6; /* 勾選後的邊框顏色 */
+        }
+    </style>
+    <div class="container-fluid">
+        <div id="app" class="main">
+            <h3>員工服務技能</h3>
+            <div class="btnbox">
+                <input type="submit" value="儲存" class="btn btn-save" />
+                @Html.ActionLink("返回", "Index", "Employees", null, new { @class = "btn btn-back" })
+            </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-md-4 nickname">
+                    <!-- Employee ID Selection -->
+                    <div>
+                        @Html.LabelFor(model => model.EmployeeID, "暱稱")
+                        <div>
+                            @Html.DropDownList("EmployeeID", (SelectList)ViewBag.EmployeeID, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                            @Html.ValidationMessageFor(model => model.EmployeeID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Categories Checkboxes -->
+                <div class="col-md-7 skill">
+                    <label class="control-label col-md-2">技能名稱</label>
+                    <div>
+                        @foreach (var skill in ViewBag.SkillCategories)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <!-- 如果技能已經存在，則將 checked 屬性設置為 true -->
+                                    <input type="checkbox" name="selectedSkills" value="@skill.Value" @(skill.Selected ? "checked" : "") class="checkbox-input" />
+                                    <span class="custom-checkbox"></span> @skill.Text
+                                </label>
+                            </div>
+                        }
+                        @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

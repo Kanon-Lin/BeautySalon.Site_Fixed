@@ -1,0 +1,473 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@model IEnumerable<BeautySalon.Backstage.Site.Models.ViewModels.OrderVm>
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>訂單列表</title>
+    <style>
+        /*共用*/
+        ul.dropdown-menu.show {
+            margin-top: 8px;
+            border: none;
+            border-radius: 0px;
+            background-color: rgb(197,207,178,1);
+        }
+
+        /* 下拉菜單 */
+        .dropdown-menu {
+            background-color: #C5CFB2;
+            padding: 0px;
+            margin: 7px 5px 5px 5px;
+            position: static;
+            top: 90%;
+            left: 0;
+            min-width: 110px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 下拉菜單項目 */
+        .dropdown-item {
+            color: #64695B;
+            font-weight: bold;
+            padding: 10px;
+            font-size: medium;
+            display: block;
+            margin: 1px;
+            width: 90%;
+        }
+
+            .dropdown-item:hover {
+                background-color: rgb(165, 173, 149,0.5);
+                border-radius: 20px;
+            }
+        h3 {
+            margin: 10px;
+            padding: 10px 0 0 0 !important;
+            font-weight: bold !important;
+            text-align: center;
+            color: #776B5D !important;
+        }
+
+        /*共用*/
+        .main {
+            padding: 30px;
+            border-radius: 18px;
+            margin: 20px 0px 50px 0px !important;
+        }
+
+        /*列表操作欄*/
+        .search-bar {
+            margin-bottom: 10px !important;
+            display: flex;
+            align-items: center;
+            margin: 20px;
+            width: 800px !important;
+        }
+
+        .search-input, .search-bar {
+            display: flex; /* 將查詢輸入框和按鈕放在同一行 */
+            white-space: nowrap;
+        }
+
+        .statusFilter {
+            min-width: 100px;
+            font-weight: bold !important;
+            color: #776B5D !important;
+            display: flex; /* 將標籤和下拉選單放在同一行 */
+            align-items: center; /* 垂直置中 */
+        }
+
+        .selectedStatus {
+            width: 120px !important;
+            margin-right: 0px !important;
+            margin-left: 20px !important;
+        }
+
+        .form-control,
+        .selectedStatus {
+            width: 500px;
+            /*max-width: 100%;*/
+            /*width: 300px !important;*/
+            height: 100%;
+            min-height: 40px; /* 設定最小高度，根據需要調整 */
+            box-sizing: border-box; /* 确保 padding 和 border 不会增加元素的总宽度 */
+            color: #A0937D !important; /* 你可以根據需求修改顏色 */
+            margin-right: 20px;
+        }
+
+            /*列表操作欄*/
+            .form-control::placeholder {
+                color: #8E806A !important; /* 設置 placeholder 文字顏色為灰色 */
+                opacity: 1; /* 確保顏色應用於 placeholder */
+                font-size: small;
+            }
+
+        .btn {
+            background-color: rgb(133,139,120,0.5) !important;
+            color: #fefefe !important;
+            border-radius: 10px !important;
+            margin: 5px;
+            font-weight: bold !important;
+        }
+
+        /*資料欄*/
+        .btn-custom {
+            display: flex;
+            justify-content: center !important;
+            align-items: center; /* 垂直置中 */
+            white-space: nowrap; /* 防止文字換行 */
+            text-align: center !important;
+        }
+
+        /*列表操作欄*/
+        .table {
+            margin: 25px !important;
+            width: 95% !important;
+            border-collapse: separate;
+            border-spacing: 2px 2px; /* 設置水平間隔為 15px，垂直間隔為 10px */
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-sizing: border-box !important;
+            vertical-align: middle !important; /* 垂直居中 */
+        }
+
+        /*列表操作欄*/
+        .table-container {
+            max-height: 750px;
+            /*overflow: auto;*/ /* 添加纵向滚动条 */
+            display: block;
+            width: 100%;
+            border-radius: 10px !important;
+        }
+        /*列表操作欄*/
+        .table thead th {
+            background-color: #CDD5C6 !important;
+            text-align: center;
+            padding: 10px;
+            color: #776B5D !important;
+            margin: 2px !important;
+        }
+
+        /*列表操作欄*/
+        .table td {
+            text-align: left;
+            color: rgb(96, 63, 38,0.8);
+            padding-left: 20px !important;
+            font-weight: bold;
+            /*background-color: whitesmoke !important;*/
+            background-color: rgb(247, 249, 242,0.7) !important;
+            height: 60px;
+        }
+        /*資料欄*/
+        .col-md-3, .col-md-5 {
+            margin-top: 40px !important;
+            color: rgb(96,63,38,0.8);
+        }
+
+        /*列表操作欄*/
+        .operate {
+            width: 100% !important;
+            height:100%;
+            display: flex; /* 使用 Flexbox */
+            justify-content: center; /* 水平置中 */
+            align-items: center; /* 垂直置中 */
+            white-space: nowrap; /* 防止文字換行 */
+        }
+
+
+        /*列表操作欄*/
+        .table td.operate button {
+            margin: 0 10px !important; /* 按钮间距 */
+        }
+
+        .text-danger {
+            min-height: 40px !important; /* 你可以根據錯誤訊息的高度進行調整 */
+            display: block !important;
+        }
+
+
+
+        /* 分頁按鈕樣式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            list-style-type: none;
+        }
+
+        .page-item {
+            height: 40px; /* 設定固定高度 */
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            color: #b8afa6;
+            background-color: white;
+            border: 1px solid #b8afa6;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            height: 100%; /* 使 link 填滿整個 item */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #b8afa6;
+            color: white;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #b8afa6;
+            color: white;
+        }
+
+        .pagination .disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .text-red {
+            color: #D91656 !important;
+        }
+
+        .text-blue {
+            color: #4379F2 !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app" class="main">
+        <h3>訂單列表</h3>
+        <div class="search-input d-flex justify-content-between align-items-center">
+
+            <div class="search-bar">
+                <input type="text" v-model="searchTerm" placeholder="請輸入訂單ID/會員ID/會員姓名" class="form-control" />
+                <button class="btn btn-search" v-on:click="searchOrder">查詢</button>
+            </div>
+
+            <label for="statusFilter" class="statusFilter">
+                篩選狀態 :
+                <select id="statusFilter" v-model="selectedStatus" v-on:change="filterByStatus" class="form-control selectedStatus">
+                    <option value="">全部</option>
+                    <option value="1">未付款</option>
+                    <option value="2">已付款</option>
+                    <option value="3">待退款</option>
+                    <option value="4">已退款</option>
+                    <option value="5">訂單取消</option>
+                </select>
+            </label>
+        </div>
+
+
+
+
+        <div class="table-container">
+            <table class="table table-hover">
+                <!-- 以下內容會隨著主題不同而改變 -->
+                <thead>
+                    <tr>
+                        <th>訂單ID</th>
+                        <th>訂單日期</th>
+                        <th>會員ID</th>
+                        <th>會員姓名</th>
+                        <th>總金額</th><!--折扣後總金額-->
+                        <th>狀態</th><!--折扣後總金額-->
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="order in paginatedOrders" :key="order.OrderID">
+                        <td class="data">{{ order.OrderID }}</td>
+                        @*<td class="data" style="width: 15%">{{ order.OrderDate }}</td>*@
+                        <td class="data">{{ formatDate(order.OrderDate) }}</td>
+                        <td class="data">{{ order.MemberID }}</td>
+                        <td class="data">{{ order.Name }}</td>
+                        <td class="data">{{ order.TotalNetAmount }}</td>
+                        <td :class="['data', { 'text-blue': order.OrderStatus === 1, 'text-red': order.OrderStatus === 3 }]">
+                            {{ getOrderStatus(order.OrderStatus) }}
+                        </td>
+                        <td class="data" style="display: flex; justify-content: center; align-items: center;">
+                            <button class="btn btn-custom"
+                                    v-on:click="viewOrder(order.OrderID)">
+                                查看
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+            <!-- 分頁 -->
+            <ul class="pagination">
+                <li :class="['page-item', { disabled: currentPage === 1 }]">
+                    <span class="page-link" v-on:click="changePage(1)"><i class="fas fa-chevron-left"></i> 第一頁</span>
+                </li>
+                <li v-for="(page, index) in displayedPages" :key="index" :class="['page-item', { active: currentPage === page }]">
+                    <span class="page-link" v-on:click="changePage(page)">
+                        {{ page }}
+                    </span>
+                </li>
+                <li :class="['page-item', { disabled: currentPage === totalPages }]">
+                    <span class="page-link" v-on:click="changePage(totalPages)"><i class="fas fa-chevron-right"></i> 最末頁</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+const { createApp } = Vue;
+
+
+        createApp({
+            data() {
+                return {
+                    searchTerm: '',
+                    selectedStatus: '',
+                    orders: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)),
+                    filteredOrders: [],
+                    currentPage: 1,
+                    itemsPerPage: 10
+
+
+                };
+            },
+            computed: {
+                totalPages() {
+                    return Math.ceil(this.filteredOrders.length / this.itemsPerPage);
+                },
+                paginatedOrders() {
+                    const start = (this.currentPage - 1) * this.itemsPerPage;
+                    return this.filteredOrders.slice(start, start + this.itemsPerPage);
+                },
+                displayedPages() {
+                    const pages = [];
+                    const maxPages = 10; // 最多顯示 7 頁
+
+                    if (this.totalPages <= maxPages) {
+                        // 總頁數少於或等於最大頁數，顯示所有頁數
+                        for (let i = 1; i <= this.totalPages; i++) {
+                            pages.push(i);
+                        }
+                    } else {
+                        // 超過最大頁數，顯示部分頁碼並加上 '...'
+                        if (this.currentPage > 4) {
+                            pages.push(1);
+                            if (this.currentPage > 5) pages.push('...');
+                        }
+
+                        // 顯示當前頁碼附近的頁碼
+                        const startPage = Math.max(2, this.currentPage - 1);
+                        const endPage = Math.min(this.totalPages - 1, this.currentPage + 1);
+                        for (let i = startPage; i <= endPage; i++) {
+                            pages.push(i);
+                        }
+
+                        if (this.currentPage < this.totalPages - 3) {
+                            pages.push('...');
+                            pages.push(this.totalPages);
+                        }
+                    }
+
+                    return pages;
+                }
+            },
+
+            created() {
+                this.filteredOrders = this.orders;
+                //console.log(this.orders); // 查看訂單資料
+            },
+            methods: {
+                changePage(page) {
+                    if (page < 1 || page > this.totalPages || page === '...') return; // 防止非法頁碼
+                    this.currentPage = page;
+                    // 在這裡添加其他邏輯，例如請求新數據等
+                },
+
+                filterByStatus() {
+                    this.filteredOrders = this.orders.filter(appointment => {
+                        return this.selectedStatus === '' || appointment.OrderStatus == this.selectedStatus;
+                    });
+                    this.currentPage = 1; // 篩選後重設為第一頁
+                },
+                searchOrder() {
+                    if (!this.searchTerm) {
+                        this.filteredOrders = this.orders;
+                        return;
+                    }
+                    this.filteredOrders = this.orders.filter(order => {
+                        const matchesSearchTerm = String(order.MemberID).includes(this.searchTerm)
+                            || String(order.OrderID).includes(this.searchTerm)
+                            || order.Name.includes(this.searchTerm);
+                        const matchesStatus = this.selectedStatus === '' || order.OrderStatus == this.selectedStatus;
+                        return matchesSearchTerm && matchesStatus;
+                    });
+                    this.currentPage = 1; // 篩選後重設為第一頁
+                },
+                onSearch() {
+                    this.searchOrder();
+                    this.filterByStatus();
+                },
+
+
+
+        getOrderStatus(status) {
+            switch (status) {
+                case 1:
+                    return '未付款';
+                case 2:
+                    return '已付款';
+                case 3:
+                    return '待退款';
+                case 4:
+                    return '已退款';
+                case 5:
+                    return '訂單取消';
+                default:
+                    return '未知狀態';
+            }
+        },
+        formatDate(value) {
+            if (!value) return '';
+            return new Date(value).toISOString().split('T')[0]; // 格式化為 YYYY-MM-DD
+        },
+
+        viewOrder(id) {
+            console.log("viewOrder 被呼叫，id:", id); // 確認方法被呼叫
+            if (id) {
+                window.location.href = `/Orders/ViewOrder?orderId=${id}`;
+
+            } else {
+                console.error("ID 為 null 或 undefined");
+            }
+                },
+                notPastOrToday(appointmentDate) {
+                    const currentDate = new Date();
+                    const appointmentDateObj = new Date(appointmentDate);
+                    appointmentDateObj.setHours(0, 0, 0, 0);
+                    currentDate.setHours(0, 0, 0, 0);
+
+                    return appointmentDateObj >= currentDate;
+                },
+                goToPage(pageNumber) {
+                    if (pageNumber < 1 || pageNumber > this.totalPages) return;
+                    this.currentPage = pageNumber;
+                },
+
+
+    },
+
+
+}).mount('#app');
+    </script>
+</body>
+</html>

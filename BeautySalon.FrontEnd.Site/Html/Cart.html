@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>購物車</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- 自定義 CSS -->
+    <link href="../Css/cart.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../Css/navbar.css" />
+    <script src="../JavaScript/NavbarComponent.js"></script>
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+</head>
+<body>
+    <div id="app">
+        <navbar-component></navbar-component>
+        <div class="member-area">
+            <div class="content-wrapper" role="main">
+                <div class="section main-content">
+                    <h1 id="購物車" class="mb-4">
+                        <i class="fa-solid fa-cart-shopping" style="color: #184642;"></i>
+                        購物車
+                    </h1>
+
+                    <!-- 調試信息 -->
+                    <div class="debug-info" style="display: none;">
+                        <p>Cart items count: {{ cartItems.length }}</p>
+                        <p>Cart items: {{ JSON.stringify(cartItems) }}</p>
+                    </div>
+
+                    <div v-if="cartItems.length === 0">
+                        <div class="alert alert-info text-center">
+                            您的購物車是空的。
+                        </div>
+                        <button @click="continueShoppingCard" class="btn btn-continue-shopping" style="margin-top:30px;">
+                            <i class="fas fa-arrow-left"></i> 繼續選購
+                        </button>
+                        
+                    </div>
+
+
+
+
+                    <template v-else>
+                        <div class="cart-item mb-3" v-for="item in cartItems" :key="item.id">
+                            <div class="order-header d-flex justify-content-between">
+                                <h5>{{ item.serviceName }}</h5>
+                                <button class="remove" @click="removeItem(item)" >
+                                    <i class="fa-solid fa-trash" style="color: #db1a1a;"></i>
+                                </button>
+                            </div>
+
+                            <div class="order-body d-flex justify-content-between align-items-center">
+                                <div class="order-details">單價: {{ item.unitPrice }} 元</div>
+
+                                <div class="quantity-controls d-flex align-items-center">
+                                    <button @click="decreaseQuantity(item)"
+                                            class="btn btn-sm btn-secondary">
+                                        -
+                                    </button>
+                                    <span class="mx-2">{{ item.quantity }}</span>
+                                    <button @click="increaseQuantity(item)"
+                                            class="btn btn-sm btn-secondary">
+                                        +
+                                    </button>
+                                </div>
+
+                                <div>小計: NT$ {{ formatCurrency(item.unitPrice * item.quantity) }}</div>
+                            </div>
+                        </div>
+
+                        <div class="total-section text-end">
+                            <h5>合計: NT$ {{ formatCurrency(originalTotal) }}</h5>
+                        </div>
+
+                        <!-- 折扣區域 -->
+                        <div class="discount-section row align-items-center mt-2"
+                             v-if="discountValue > 0">
+                            <div class="col-6 text-start">
+                                <h5>已使用折扣 {{ discountText }}</h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h5>- NT$ {{ formatCurrency(discountAmount) }}</h5>
+                            </div>
+                        </div>
+
+                        <div class="total-section text-end mt-2">
+                            <h5>總額: NT$ {{ formatCurrency(totalAmount) }}</h5>
+                        </div>
+
+                        <div class="alert alert-info mt-3">
+                            <p>注意事項：</p>
+
+                            <p>1.付款後才可在訂單明細頁面進行預約。</p>
+                            <p>2.下訂後如欲取消訂單，可在訂單明細頁面取消</p>
+                        </div>
+
+                        <div class="button-group">
+                            <button @click="continueShoppingCard" class="btn btn-continue-shopping">
+                                <i class="fas fa-arrow-left"></i> 繼續選購
+                            </button>
+                            <button @click="placeOrder" class="btn btn-primary order-button">
+                                確認下訂
+                            </button>
+                        </div>
+
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 結構 -->
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-center">
+                        <h3 class="modal-title" id="orderModalLabel">
+                            <i class="fa-solid fa-check-circle" style="color: #184642;"></i>
+                            下訂成功!
+                        </h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="modal-text">
+                            <p>匯款資訊</p>
+                            <p>855-4567891357</p>
+                            <p>請於兩天內匯款完成，<br />否則自動取消該筆訂單</p>
+                            <p>如有任何問題請聯絡客服</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-primary" @click="closeOrderModal">
+                            我的訂單
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 引入 authService 和 useAuth -->
+    <script src="../JavaScript/orderService.js"></script>
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        const app = createApp({
+            components: {
+                "navbar-component": NavbarComponent,
+            },
+            setup() {
+                const {
+                    user,
+                    isAuthenticated,
+                    getCart,
+                    addToCart,
+                    removeFromCart,
+                    updateCartItemQuantity,
+                    clearCart,
+                    getTotalCartItems,
+                    getTotalCartPrice,
+                    createOrder
+                } = window.useAuth();
+
+                // 購物車資料
+                const cartItems = ref([]);
+
+                // 加載購物車數據
+                const loadCartItems = () => {
+                    try {
+                        cartItems.value = getCart();
+                        console.log('Loaded cart items:', cartItems.value);
+                    } catch (error) {
+                        console.error('Error loading cart items:', error);
+                        cartItems.value = []; // 確保在出錯時至少設置一個空數組
+                    }
+                };
+
+                // 計算總數量
+                const totalQuantity = computed(() => {
+                    return cartItems.value.reduce((total, item) => total + (Number(item.quantity) || 0), 0);
+                });
+
+                // 計算原始總額
+                const originalTotal = computed(() => {
+                    return cartItems.value.reduce((total, item) => {
+                        const price = Number(item.unitPrice) || 0;
+                        const quantity = Number(item.quantity) || 0;
+                        return total + price * quantity;
+                    }, 0);
+                });
+
+                // 折扣相關邏輯
+                const discountValue = computed(() => {
+                    if (totalQuantity.value >= 15) return 0.3;
+                    else if (totalQuantity.value >= 10) return 0.2;
+                    else if (totalQuantity.value >= 5) return 0.1;
+                    else return 0;
+                });
+
+                const discountText = computed(() => {
+                    if (totalQuantity.value >= 15) return '【滿15堂打7折】';
+                    else if (totalQuantity.value >= 10) return '【滿10堂打8折】';
+                    else if (totalQuantity.value >= 5) return '【滿5堂打9折】';
+                    else return '';
+                });
+
+                const discountAmount = computed(() => {
+                    return Math.round(originalTotal.value * discountValue.value);
+                });
+
+                const totalAmount = computed(() => {
+                    return Math.max(0, originalTotal.value - discountAmount.value);
+                });
+
+                // 格式化貨幣
+                const formatCurrency = (value) => {
+                    return new Intl.NumberFormat('zh-TW', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
+                };
+
+                // 增加商品數量
+                const increaseQuantity = (item) => {
+                    updateCartItemQuantity(item.id, item.quantity + 1);
+                    loadCartItems();
+                };
+
+                // 減少商品數量
+                const decreaseQuantity = (item) => {
+                    if (item.quantity > 1) {
+                        updateCartItemQuantity(item.id, item.quantity - 1);
+                        loadCartItems();
+                    }
+                };
+
+                // 移除商品
+                const removeItem = (item) => {
+                    removeFromCart(item.id);
+                    loadCartItems();
+                };
+
+                // 確認下訂
+                const placeOrder = async () => {
+                    if (!isAuthenticated.value) {
+                        alert("請先登入後再進行購買。");
+                        const returnUrl = encodeURIComponent(window.location.href);
+                        window.location.href = `/Html/Login.html?returnUrl=${returnUrl}`;
+                        return;
+                    }
+                    try {
+                        // 準備訂單數據
+                        const orderData = {
+                            OrderDetails: cartItems.value.map(item => ({
+                                ServiceID: item.id,
+                                Quantity: item.quantity,
+                                UnitPrice: item.unitPrice
+                            }))
+                        };
+                        console.log('Prepared order data:', orderData);
+
+                        // 調用創建訂單的 API
+                        const result = await createOrder(orderData);
+                        console.log('Order creation result:', result);
+
+                        if (result.success) {
+                            // 訂單創建成功
+                            const orderModal = new bootstrap.Modal(document.getElementById("orderModal"));
+                            orderModal.show();
+                            loadCartItems();
+                        } else {
+                            // 訂單創建失敗
+                            alert("訂單創建失敗：" + (result.message || "未知錯誤"));
+                        }
+                    } catch (error) {
+                        console.error("Error creating order:", error);
+                        alert("訂單創建過程中發生錯誤：" + (error.message || "未知錯誤"));
+                    }
+                };
+
+                // 關閉模態視窗並跳轉到我的訂單頁面
+                const closeOrderModal = () => {
+                    const orderModal = bootstrap.Modal.getInstance(document.getElementById("orderModal"));
+                    orderModal.hide();
+                    window.location.href = "orderlist.html";
+                };
+
+                const continueShoppingCard = () => {
+                    window.location.href = "/Html/Products_.html";
+                };
+
+                onMounted(() => {
+                    console.log('Component mounted');
+                    loadCartItems();
+                });
+
+                return {
+                    cartItems,
+                    originalTotal,
+                    totalQuantity,
+                    discountValue,
+                    discountText,
+                    discountAmount,
+                    totalAmount,
+                    formatCurrency,
+                    increaseQuantity,
+                    decreaseQuantity,
+                    removeItem,
+                    placeOrder,
+                    closeOrderModal,
+                    continueShoppingCard,
+                };
+            },
+        });
+
+        app.mount("#app");
+    </script>
+</body>
+</html>

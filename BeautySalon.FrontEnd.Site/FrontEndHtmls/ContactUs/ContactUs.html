@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>顧客留言版</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../footer/footer.css" />
+    <link rel="stylesheet" href="../navbar/navbar.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 100px auto; /* 新增 margin-top 來下移位置 */
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+      .form-group label {
+        font-weight: bold;
+      }
+      .form-check-inline {
+        margin-right: 15px;
+      }
+    </style>
+  </head>
+  <body>
+      <div id="app">
+          <div>
+              <navbar ref="navbarRef"></navbar>
+          </div>
+          <div class="form-container">
+              <h2 class="text-center">顧客留言版</h2>
+              <form>
+                  <div class="form-group">
+                      <label for="name">姓名</label>
+                      <input type="text"
+                             class="form-control"
+                             id="name"
+                             placeholder="請輸入您的姓名"
+                             required />
+                  </div>
+                  <div class="form-group">
+                      <label>性別</label>
+                      <div class="mt-2">
+                          <div class="form-check form-check-inline">
+                              <input class="form-check-input"
+                                     type="radio"
+                                     name="gender"
+                                     id="male"
+                                     value="male"
+                                     checked />
+                              <label class="form-check-label" for="male">男</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                              <input class="form-check-input"
+                                     type="radio"
+                                     name="gender"
+                                     id="female"
+                                     value="female" />
+                              <label class="form-check-label" for="female">女</label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="phone">電話</label>
+                      <input type="tel"
+                             class="form-control"
+                             id="phone"
+                             placeholder="請輸入您的電話"
+                             required />
+                  </div>
+                  <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email"
+                             class="form-control"
+                             id="email"
+                             placeholder="請輸入您的 email"
+                             required />
+                  </div>
+                  <div class="form-group">
+                      <label for="message">留言</label>
+                      <textarea class="form-control"
+                                id="message"
+                                rows="4"
+                                placeholder="請輸入您的留言"
+                                required></textarea>
+                  </div>
+                  <button type="submit"
+                          class="btn btn-block"
+                          style="color: white; background-color: #b8afa6">
+                      送出
+                  </button>
+              </form>
+          </div>
+
+          <footer>
+              <p>
+                  營業時間：早上10點至晚上8點<br />
+                  地址：台北市大安區<br />
+                  電話：02-1234-5678<br />
+                  交通方式：捷運大安站2號出口步行3分鐘
+              </p>
+              <div class="socialMediaBtns">
+                  <a href="#"
+                     class="social-button instagram me-3"
+                     target="_blank"
+                     rel="noopener noreferrer">
+                      <i class="fa-brands fa-instagram"></i>
+                  </a>
+
+                  <a href="#"
+                     class="social-button line me-3"
+                     target="_blank"
+                     rel="noopener noreferrer">
+                      <i class="fa-brands fa-line"></i>
+                  </a>
+
+                  <a href="#"
+                     class="social-button facebook"
+                     target="_blank"
+                     rel="noopener noreferrer">
+                      <i class="fa-brands fa-facebook-f"></i>
+                  </a>
+              </div>
+          </footer>
+      </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="module">
+      import { setupNavbar } from "../navbar/NavbarSetup.js";
+      import NavbarComponent from "../navbar/NavbarComponent.js";
+
+      const { createApp, ref } = Vue;
+
+      const app = createApp({
+        setup() {
+          const navbarRef = ref(null);
+
+          return {
+            navbarRef,
+          };
+        },
+      });
+
+      setupNavbar(app);
+      /*app.component("navbar", NavbarComponent);*/
+      app.mount("#app");
+    </script>
+  </body>
+</html>

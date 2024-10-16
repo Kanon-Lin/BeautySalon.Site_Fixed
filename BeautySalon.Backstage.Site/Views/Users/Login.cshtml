@@ -1,0 +1,133 @@
+﻿@model BeautySalon.Backstage.Site.Models.ViewModels.LoginVm
+
+@{
+    ViewBag.Title = "Login";
+}
+
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+    <style>
+        /* 設置 html 和 body 的基本樣式 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            width: 100%;
+            height: 100%; /* 確保 html 和 body 高度為 100% */
+            overflow: hidden; /* 隱藏超出視口的內容 */
+        }
+
+        .body-content {
+            margin-left: 150px !important;
+            margin-top: 50px !important;
+        }
+
+            /* 設置 body 背景圖片和顏色 */
+            body {
+            background-image: url('/HTMLCSS/background5.jpg');
+            background-size: cover; /* 確保圖片覆蓋整個頁面 */
+            background-position: center; /* 將圖片置中 */
+            background-repeat: no-repeat; /* 防止圖片重複 */
+        }
+
+        /* 設置 container 高度為視口高度 */
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh; /* 確保容器高度覆蓋整個視口 */
+        }
+
+        /* 左側區域的樣式 */
+        .right-side {
+            flex: 1;
+        }
+
+        /* 右側區域的樣式 */
+        .left-side {
+            margin-top: -100px !important;
+            flex: 1;
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-top:-100px !important;
+        }
+
+        /* 登入表單的樣式 */
+        .login-form {
+            max-width: 300px;
+            width: 100%;
+            background: #f2f0e4 !important;
+            padding: 30px;
+            /*padding-top: 45px;*/
+            border-radius: 18px;
+            margin-left: 150px !important;
+            /*margin-top:-100px !important;*/
+        }
+
+            /* 登入表單輸入欄位的樣式 */
+            .login-form input[type="text"],
+            .login-form input[type="password"] {
+                width: 300px;
+                height: 60px;
+                padding: 20px;
+                margin-bottom: 15px;
+                border: 0.5px solid #ddd;
+                border-radius: 14px;
+                font-size: 20px;
+                color: #a08d81a2;
+            }
+
+            /* 登入按鈕的樣式 */
+            .login-form button {
+                width: 260px;
+                padding: 10px;
+                background: #a08d81a2;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                margin: 10px;
+            }
+
+                /* 登入按鈕的懸停效果 */
+                .login-form button:hover {
+                    background: #625e4e;
+                }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-side ">
+            <div>
+                <img src="@Url.Content("~/HTMLCSS/logo3.png")" alt="Logo" style="width: 600px; height: 480px; vertical-align: middle;">
+            </div>
+
+            <div class="login-form">
+                @using (Html.BeginForm("Login", "Users", FormMethod.Post))
+                {
+                    @Html.TextBoxFor(m => m.EmployeeNo, new { placeholder = "員工編號", @class = "form-control" })
+                    @Html.PasswordFor(m => m.Password, new { placeholder = "密碼", @class = "form-control" })
+                    <button type="submit">登入</button>
+                }
+            </div>
+        </div>
+        <div class="right-side"></div>
+    </div>
+</body>
+
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

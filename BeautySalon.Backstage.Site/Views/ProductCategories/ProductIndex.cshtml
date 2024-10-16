@@ -1,0 +1,348 @@
+﻿
+@{
+    ViewBag.Title = "ProductIndex";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>服務項目列表</title>
+    @*<link rel="stylesheet" href="/Content/Css/style.css" />*@
+    @*<link rel="stylesheet" href="~/Content/Css/style.css" />*@
+    <style>
+         ul.dropdown-menu.show {
+     margin-top: 8px;
+     border: none;
+     border-radius: 0px;
+     background-color: rgb(197,207,178,1);
+ }
+
+ /* 下拉菜單 */
+ .dropdown-menu {
+     background-color: #C5CFB2;
+     padding: 0px;
+     margin: 7px 5px 5px 5px;
+     position: static;
+     top: 90%;
+     left: 0;
+     min-width: 110px;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ }
+
+ /* 下拉菜單項目 */
+ .dropdown-item {
+     color: #64695B;
+     font-weight: bold;
+     padding: 10px;
+     font-size: medium;
+     display: block;
+     margin: 1px;
+     width: 90%;
+ }
+
+        .dropdown-item:hover {
+            background-color: rgb(165, 173, 149,0.5);
+            border-radius: 20px;
+        }
+        .row {
+            margin: 20px 50px 50px 50px !important;
+            background-color: rgba(241, 243, 236, 0.7) !important;
+            border-radius: 18px;
+        }
+
+        h3 {
+            margin: 10px;
+            padding: 10px 0 0 0 !important;
+            font-weight: bold !important;
+            text-align: center;
+            color: #776B5D !important;
+        }
+
+        .main {
+            padding: 30px;
+            border-radius: 18px;
+            background-color: #FAF4E3;
+        }
+
+        .search-bar {
+            margin-bottom: 10px !important;
+            display: flex;
+            align-items: center;
+            margin: 20px;
+            width: 40%;
+        }
+
+        form {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .form-control {
+            flex: 1;
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box; /* 确保 padding 和 border 不会增加元素的总宽度 */
+            color: #A0937D !important; /* 你可以根據需求修改顏色 */
+        }
+
+            .form-control::placeholder {
+                color: #8E806A !important; /* 設置 placeholder 文字顏色為灰色 */
+                opacity: 1; /* 確保顏色應用於 placeholder */
+            }
+
+        .btn {
+            color: #fefefe !important;
+            border-radius: 10px !important;
+            margin: 15px;
+            font-weight: bold !important;
+            background-color: rgb(133,139,120,0.5) !important;
+            height: 48px;
+        }
+
+        .btn-custom {
+            display: flex;
+            justify-content: space-between;
+            height:38px !important;
+        }
+
+        .btn-add {
+            padding: 9px 16px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .table {
+            margin: 25px !important;
+            width: 95% !important;
+            border-collapse: separate;
+            border-spacing: 2px 2px; /* 設置水平間隔為 15px，垂直間隔為 10px */
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-sizing: border-box !important;
+            vertical-align: middle !important; /* 垂直居中 */
+        }
+
+        .table-container {
+            /*max-height: 250px;*/
+            overflow-y: auto; /* 添加纵向滚动条 */
+            display: block;
+            width: 100%;
+            border-radius: 10px !important;
+        }
+
+        .table thead th {
+            /*background-color: rgb(218, 208, 194,0.4);*/
+            background-color: #CDD5C6 !important;
+            text-align: center;
+            padding: 10px;
+            color: #776B5D !important;
+            margin: 2px !important;
+        }
+
+        .table td {
+            text-align: left;
+            color: rgb(96, 63, 38,0.8) !important;
+            padding-left: 20px !important;
+            font-weight: bold;
+            background-color: rgb(247, 249, 242,0.7) !important;
+            height: 80px;
+        }
+
+        .operate {
+            width: 100% !important;
+            text-align: center !important;
+            margin: 0px !important;
+            padding: 2px 0px 2px 0px;
+            display: flex; /* 使用 Flexbox */
+            align-items: center; /* 垂直置中 */
+        }
+
+        .table td.operate button {
+            margin: 0 10px !important; /* 按钮间距 */
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="main">
+        <!-- app叫用js -->
+        <h3>服務項目列表</h3>
+
+        <div class="search-bar">
+            <input type="text" v-model="searchTerm" placeholder="請輸入項目名稱" class="form-control" />
+            <button class="btn btn-search" v-on:click="searchService">查詢</button>
+            <button class="btn btn-add" v-on:click="addService">新增項目</button>
+        </div>
+        <div class="table-container">
+            <table class="table table-hover">
+                <!-- 以下內容會隨著主題不同而改變 -->
+                <thead>
+                    <tr>
+                        <th style="width: 15%">項目名稱</th>
+                        <th style="width: 10%">類別</th>
+                        <th style="width: 10%">售價</th>
+                        <th style="width: 5%">時長</th>
+                        <th style="width: 40%">描述</th>
+                        <th style="width: 20%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="service in filteredServices" :key="service.ProductId">
+                        <td class="data" style="width: 15%">{{ service.ProductName }}</td>
+                        <td class="data" style="width: 10%">{{ service.CategoryName }}</td>
+                        <td class="data" style="width: 10%">{{ service.Price }}</td>
+                        <td class="data" style="width: 5%">{{ service.Duration }}</td>
+                        <td class="data" style="width: 40%">
+                            {{ service.Description }}
+                        </td>
+                        <td class="operate" style="width: 20%">
+                            <button class="btn btn-custom"
+                                    v-on:click="editService(service.ProductId)">
+                                編輯
+                            </button>
+                            <button class="btn btn-custom"
+                                    v-on:click="deleteService(service.ProductId)">
+                                刪除
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    @*<script src="../script.js" defer></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="/Scripts/JavaScripts/ServiceItem/serivceitemlist.js" defer></script>*@
+    <script>
+
+    const { createApp, ref, onMounted } = Vue;
+
+    const config = {
+        setup() {
+            const url = "/api/ProductsApi/";
+
+            const searchTerm = ref('');
+            const services = ref([]);
+            const filteredServices = ref([]);
+
+            // 從 API 獲取資料 (使用 fetch)
+            const fetchServices = () => {
+                fetch('https://localhost:44302/api/ProductsApi/ProductIndext')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // 將回應轉換為 JSON
+                    })
+                    .then(data => {
+                        console.log('Fetched data:', data);
+                        services.value = data;
+                        filteredServices.value = services.value;  // 初始時顯示所有服務
+                    })
+                    .catch(error => {
+                        console.error('Error fetching services:', error);
+                    });
+            };
+
+            // 搜尋功能
+            const updateFilteredService = (servicesData) => {
+                if (!Array.isArray(servicesData)) {
+                    console.error('獲取的數據不是數組:', servicesData);
+                    return; // 停止執行，如果不是數組
+                }
+
+                // 當 searchTerm 為空時，顯示所有服務項目
+                if (searchTerm.value.trim() === '') {
+                    filteredServices.value = servicesData; // 將所有獲取到的服務賦值給 filteredServices
+                } else {
+                    // 否則，過濾出匹配的服務項目
+                    filteredServices.value = servicesData.filter(s =>
+                        (s.ProductName && s.ProductName.includes(searchTerm.value)) ||
+                        (s.Description && s.Description.includes(searchTerm.value))
+                    );
+                }
+            };
+
+            const searchService = () => {
+                let url;
+
+                // 檢查輸入值是否為空
+                if (searchTerm.value.trim() === '') {
+                    url = `https://localhost:44302/api/ProductsApi/ProductIndext`; // 獲取所有服務的 API
+                } else {
+                    url = `https://localhost:44302/api/ProductsApi/SearchProduct?searchTerm=${encodeURIComponent(searchTerm.value)}`;
+                }
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('獲取的服務數據:', data); // 檢查返回的數據
+                        updateFilteredService(data);
+                    })
+                    .catch(error => {
+                        console.error('無法獲取服務:', error);
+                    });
+            };
+
+            // 新增、編輯、刪除服務
+            //const addService = () => {
+            //    window.location.href = `新增服務項目.html?mode=create`;
+            //};
+
+            //const editService = (ProductId) => {
+            //    window.location.href = `編輯服務項目.html?id=${ProductId}&mode=edit`;
+            //};
+
+            //const deleteService = (ProductId) => {
+            //    window.location.href = `刪除服務項目.html?id=${ProductId}&mode=delete`;
+            //};
+
+            const addService = () => {
+                window.location.href = `/ProductCategories/ProductCreate?mode=create`; // 加上 mode 參數
+            };
+
+            const editService = (Id) => {
+                const url = `/ProductCategories/ProductEdit?id=${Id}&mode=edit`; // 加上 mode 參數
+                console.log('Generated URL:', url);
+                window.location.href = url; // 導向編輯頁面
+            };
+
+            const deleteService = (Id) => {
+                window.location.href = `/ProductCategories/ProductDelete?id=${Id}&mode=delete`; // 加上 mode 參數
+            };
+
+
+            // 在組件掛載時自動呼叫 API 來獲取數據
+            onMounted(() => {
+                fetchServices();
+            });
+
+            return {
+                searchTerm,
+                services,
+                filteredServices,
+                searchService,
+                addService,
+                editService,
+                deleteService
+            };
+        }
+    };
+
+    const app = createApp(config);
+    app.mount('#app');
+
+
+    </script>
+</body>
+</html>

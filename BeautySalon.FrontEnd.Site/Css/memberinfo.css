@@ -1,0 +1,151 @@
+/* 全局樣式 */
+body {
+    background-color: #e8e0d9;
+    font-family: "Arial", sans-serif;
+}
+
+/* 主要佈局容器 */
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 120px 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 主內容 */
+.main-content {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    padding: 30px;
+    width: calc(100% - 230px); /* 側邊欄寬度 200px + 右邊距 30px */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 標題樣式 */
+.profile-tabs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+/* Tab 按鈕 */
+.tab-btn {
+    position: relative;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+    .tab-btn.active {
+        color: #184642;
+        font-weight: 600;
+    }
+
+    .tab-btn::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #184642;
+        transition: width 0.3s ease-in-out;
+    }
+
+    .tab-btn:hover::after,
+    .tab-btn.active::after {
+        width: 100%;
+    }
+
+    .tab-btn:hover {
+        color: #184642;
+    }
+
+/* 表單樣式 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: 600;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* 提交按鈕樣式 */
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: #184642;
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: 2px solid rgba(24, 70, 66, 0.6);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    margin: 20px auto 0;
+    width: 200px;
+}
+
+    .submit-btn:hover {
+        background-color: rgba(24, 70, 66, 0.1);
+        border-color: #184642;
+    }
+
+    .submit-btn:focus {
+        outline: none;
+    }
+
+    .submit-btn:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+/* 加載和錯誤訊息樣式 */
+.loading-message,
+.error-message {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+}
+
+.error-message {
+    color: red;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+}

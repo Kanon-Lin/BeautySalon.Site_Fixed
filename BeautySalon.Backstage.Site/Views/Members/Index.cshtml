@@ -1,0 +1,272 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@model IEnumerable<BeautySalon.Backstage.Site.Models.ViewModels.MemberVm>
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>會員列表</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /*共用*/
+        ul.dropdown-menu.show {
+            margin-top: 8px;
+            border: none;
+            border-radius: 0px;
+            background-color: rgb(197,207,178,1);
+        }
+
+        /* 下拉菜單 */
+        .dropdown-menu {
+            background-color: #C5CFB2;
+            padding: 0px;
+            margin: 7px 5px 5px 5px;
+            position: static;
+            top: 90%;
+            left: 0;
+            min-width: 110px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 下拉菜單項目 */
+        .dropdown-item {
+            color: #64695B;
+            font-weight: bold;
+            padding: 10px;
+            font-size: medium;
+            display: block;
+            margin: 1px;
+            width: 90%;
+        }
+
+            .dropdown-item:hover {
+                background-color: rgb(165, 173, 149,0.5);
+                border-radius: 20px;
+            }
+        .row {
+            margin: 20px 0px 50px 0px !important;
+            /*background-color: #FAF4E3 !important;*/
+            background-color: rgba(241, 243, 236, 0.7) !important;
+            border-radius: 18px;
+        }
+
+        /*共用*/
+        h3 {
+            margin: 10px;
+            padding: 10px 0 0 0 !important;
+            font-weight: bold !important;
+            text-align: center;
+            color: #776B5D !important;
+        }
+
+        /*共用*/
+        .main {
+            padding: 30px;
+            border-radius: 18px;
+            /*background-color: rgba(241, 243, 236, 0.1) !important;*/
+            /*background-color: rgb(254, 236, 226,0.6);*/
+        }
+
+        /*列表操作欄*/
+        .search-bar {
+            margin-bottom: 10px !important;
+            display: flex;
+            align-items: center;
+            margin: 20px;
+            /*width: 50%;*/
+        }
+
+        /*員工資料欄*/
+        .form-control {
+            flex: 1;
+            /*max-width: 100%;*/
+            width: 30px !important;
+            height: 100%;
+            min-height: 50px; /* 設定最小高度，根據需要調整 */
+            box-sizing: border-box; /* 确保 padding 和 border 不会增加元素的总宽度 */
+            color: #A0937D !important; /* 你可以根據需求修改顏色 */
+            margin-right: 20px;
+        }
+
+            /*列表操作欄*/
+            .form-control::placeholder {
+                color: #8E806A !important; /* 設置 placeholder 文字顏色為灰色 */
+                opacity: 1; /* 確保顏色應用於 placeholder */
+            }
+
+        .btn {
+            background-color: rgb(133,139,120,0.5) !important;
+            color: #fefefe !important;
+            border-radius: 10px !important;
+            margin: 5px;
+            font-weight: bold !important;
+        }
+
+        /*員工資料欄*/
+        .btn-custom {
+            display: flex;
+            justify-content: space-between !important;
+            align-items: center; /* 垂直置中 */
+            white-space: nowrap; /* 防止文字換行 */
+        }
+
+        /*列表操作欄*/
+        .table {
+            margin: 25px !important;
+            width: 95% !important;
+            border-collapse: separate;
+            border-spacing: 2px 2px; /* 設置水平間隔為 15px，垂直間隔為 10px */
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-sizing: border-box !important;
+            vertical-align: middle !important; /* 垂直居中 */
+        }
+
+        /*列表操作欄*/
+        .table-container {
+            max-height: 750px;
+            /*overflow: auto;*/ /* 添加纵向滚动条 */
+            display: block;
+            width: 100%;
+            border-radius: 10px !important;
+        }
+        /*列表操作欄*/
+        .table thead th {
+            background-color: #CDD5C6 !important;
+            text-align: center;
+            padding: 10px;
+            /*color: rgb(179, 163, 152) !important;*/
+            color: #776B5D !important;
+            margin: 2px !important;
+            white-space: nowrap;
+        }
+
+        /*列表操作欄*/
+        .table td {
+            height: 70px !important;
+            text-align: left;
+            color: rgb(96, 63, 38,0.8) !important;
+            padding-left: 20px !important;
+            font-weight: bold;
+            /*background-color: whitesmoke !important;*/
+            background-color: rgb(247, 249, 242,0.7) !important;
+        }
+        /*員工資料欄*/
+        .col-md-3, .col-md-5 {
+            margin-top: 40px !important;
+            color: rgb(96,63,38,0.8);
+        }
+
+        /*列表操作欄*/
+        .operate {
+            width: 100% !important;
+            text-align: center !important;
+            margin: 0px !important;
+            padding: 2px 0px 2px 0px;
+            display: flex; /* 使用 Flexbox */
+            align-items: center; /* 垂直置中 */
+        }
+
+        /*列表操作欄*/
+        .table td.operate button {
+            margin: 0 10px !important; /* 按钮间距 */
+        }
+
+        /*員工資料欄*/
+        .text-danger {
+            min-height: 40px !important; /* 你可以根據錯誤訊息的高度進行調整 */
+            display: block !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="main">
+        <h3>會員列表</h3>
+
+        <div class="search-bar mb-3">
+            <input type="text" id="searchTerm" class="form-control" placeholder="請輸入姓名/電話" v-model="searchTerm" />
+            <button class="btn btn-search" v-on:click="searchMember">查詢</button>
+        </div>
+        <div class="table-container">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>會員ID</th>
+                        <th>姓名</th>
+                        <th>性別</th>
+                        <th>電話</th>
+                        <th>電子郵件</th>
+                        <th>帳號</th>
+                        <th>註冊日期</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody">
+                    <tr v-for="member in filteredMembers" :key="member.MemberID">
+                        <td>{{ member.MemberID }}</td>
+                        <td>{{ member.Name }}</td>
+                        <td>
+                            {{ member.Gender == 0 ? '男' : (member.Gender == 1 ? '女' : '其他') }}
+                        </td>
+                        <td>{{ member.PhoneNumber }}</td>
+                        <td>{{ member.Email }}</td>
+                        <td>{{ member.Account }}</td>
+                        @*<td>{{ member.RegistrationDate}}</td>*@
+                        <td>{{ formatDate(member.RegistrationDate) }}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        const { createApp } = Vue;
+
+
+        createApp({
+              data() {
+                return {
+                    searchTerm: '',
+                    members: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)),
+                    filteredMembers: []
+                };
+            },
+            created() {
+                this.filteredMembers = this.members;
+            },
+            methods: {
+                searchMember() {
+                    if (!this.searchTerm) {
+                        this.filteredMembers = this.members;
+                        return;
+                    }
+                    this.filteredMembers = this.members.filter(member =>
+                        member.Name.includes(this.searchTerm) || member.PhoneNumber.includes(this.searchTerm)
+                    );
+                },
+                formatDate(dateString) {
+                    // 如果是 ISO 格式，直接用 Date 解析
+                    const date = new Date(dateString);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            },
+
+        }).mount('#app');
+
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+
+  gap: 20px; /* 调整项目之间的间距 */
+  justify-content: space-between; /* 让内容均匀分布 */
+}
+
+.iframe {
+  flex: 1;
+  min-width: 300px; /* 设置最小宽度，避免内容过小 */
+  max-width: 600px; /* 控制地图最大宽度 */
+}
+
+.info {
+  flex: 1;
+  min-width: 300px; /* 设置最小宽度，确保内容并排显示 */
+  max-width: 600px; /* 控制信息最大宽度 */
+  margin-top: 50px;
+}

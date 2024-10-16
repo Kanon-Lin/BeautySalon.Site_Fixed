@@ -1,0 +1,54 @@
+﻿body {
+}
+/* 全局樣式 */
+body {
+    background-color: #e8e0d9;
+    font-family: "Arial", sans-serif;
+}
+
+/* 主要內容容器 */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 120px 30px;
+}
+
+/* 表單容器 */
+.main-content {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    width: 60%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 表單標題 */
+h2 {
+    color: #374151;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* 文字內容 */
+p {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+/* 首頁按鈕 */
+.home-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #184642;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+    .home-btn:hover {
+        background-color: #22635d;
+    }

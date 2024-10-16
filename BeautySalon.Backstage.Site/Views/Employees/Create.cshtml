@@ -1,0 +1,234 @@
+﻿@model BeautySalon.Backstage.Site.Models.ViewModels.EmployeeCreateVm
+
+@{
+    ViewBag.Title = "新增員工";
+}
+
+
+@using (Html.BeginForm("Create", "Employees", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <title>@ViewBag.Title</title>
+    <style>
+        ul.dropdown-menu.show {
+            margin-top: 8px;
+            border: none;
+            border-radius: 0px;
+            background-color: rgb(197,207,178,1);
+        }
+
+        /* 下拉菜單 */
+        .dropdown-menu {
+            background-color: #C5CFB2;
+            padding: 0px;
+            margin: 7px 5px 5px 5px;
+            position: static;
+            top: 90%;
+            left: 0;
+            min-width: 110px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 下拉菜單項目 */
+        .dropdown-item {
+            color: #64695B;
+            font-weight: bold;
+            padding: 10px;
+            font-size: medium;
+            display: block;
+            margin: 1px;
+            width: 90%;
+        }
+
+            .dropdown-item:hover {
+                background-color: rgb(165, 173, 149,0.5);
+                border-radius: 20px;
+            }
+
+        .main {
+            padding: 30px !important;
+            border-radius: 18px !important;
+            /*background-color: rgba(241, 243, 236, 0.7) !important;*/
+            background-color: #FAF4E3;
+        }
+
+        h3 {
+            margin: 10px;
+            padding: 10px 0 0 0 !important;
+            font-weight: bold !important;
+            text-align: center;
+            color: #776B5D !important;
+        }
+
+        .btnbox {
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: flex-end;
+            height: 60px;
+        }
+
+        .btn {
+            background-color: rgb(133,139,120,0.5) !important;
+            color: #fefefe !important;
+            border-radius: 10px !important;
+            margin: 15px;
+            font-weight: bold !important;
+        }
+
+        .row {
+            margin: 5px 25px 5px 25px !important;
+            padding: 0px 15px 0px 40px;
+            border-radius: 18px;
+            font-weight: bold;
+        }
+
+        /*員工資料欄*/
+        .col-md-3, .col-md-5 {
+            margin-top: 40px !important;
+            margin-right: 20px;
+            color: rgb(96,63,38,0.8);
+        }
+
+        /*員工資料欄*/
+        form {
+            width: 100%;
+            max-width: 100%;
+        }
+        /*員工資料欄*/
+        .form-control {
+            flex: 1;
+            max-width: 100%;
+            width: 100%;
+            min-width: 250px !important;
+            height: 100%;
+            min-height: 52px; /* 設定最小高度，根據需要調整 */
+            box-sizing: border-box; /* 确保 padding 和 border 不会增加元素的总宽度 */
+            color: #A0937D !important; /* 你可以根據需求修改顏色 */
+            border: none;
+        }
+        /*員工資料欄*/
+        .text-danger {
+            min-height: 40px !important; /* 你可以根據錯誤訊息的高度進行調整 */
+            display: block !important;
+        }
+    </style>
+    <div class="container-fluid">
+        <div id="app" class="main">
+            <h3>新增員工資料</h3>
+            <div class="btnbox">
+                <input type="submit" value="儲存" class="btn btn-save" />
+                @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-back" })
+            </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <!-- 第一欄 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmployeeNo, "員工編號", htmlAttributes: new { @class = "control-label" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.EmployeeNo, new { htmlAttributes = new { @class = "form-control", @name = "EmployeeNo" } })
+                            @Html.ValidationMessageFor(model => model.EmployeeNo, "", new { @class = "text-danger", id = "employeeNo-error" })
+                            <span class="span"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Name", "姓名", new { @class = "control-label" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", id = "name-error" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nickname, "暱稱", htmlAttributes: new { @class = "control-label " })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Nickname, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Nickname, "", new { @class = "text-danger", id = "nickname-error" })
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- 第二欄 -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Password, "密碼", htmlAttributes: new { @class = "control-label " })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type = "password" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger", id = "password-error" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Phone, "電話", htmlAttributes: new { @class = "control-label " })
+                        <div class="col-md-10">
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger", id = "phone-error" }) <!-- 添加 id -->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Gender, "性別", htmlAttributes: new { @class = "control-label " })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.Gender, new SelectList(new[] {
+                            new { Value = "1", Text = "男" },
+                            new { Value = "2", Text = "女" }
+                            }, "Value", "Text"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 第三欄 -->
+                <div class="col-md-5">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, "電子信箱", htmlAttributes: new { @class = "control-label " })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger", id = "email-error" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>建立日期</label>
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.CreatedDate, "{0:yyyy-MM-dd HH:mm:ss}", new { @class = "form-control", @readonly = "readonly", id = "createdDate" })
+                        </div>
+                        <span class="text-danger"></span>
+                    </div>
+
+                    <!--<div class="form-group">
+                        <label>照片</label>
+                        <div class="col-md-10">
+                            <input type="file" name="Image" class="form-control" />-->
+                    @*@Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <!--@Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                        </div>
+                    </div>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+}
+
+<script src="https://unpkg.com/vue@3.5.3/dist/vue.global.js"></script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // 設置創建日期
+        document.getElementById('createdDate').value = new Date().toISOString().slice(0, 19).replace('T', ' ');</script>
+}

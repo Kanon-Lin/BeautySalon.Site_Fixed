@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>會員資料編輯</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="../Css/navbar.css" />
+    <link rel="stylesheet" href="../Css/memberinfo.css" />
+    <link rel="stylesheet" href="../Css/Sidebar.css" />
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+    <script src="../JavaScript/userService.js"></script>
+    <script src="../JavaScript/NavbarComponent.js"></script>
+    <script src="../JavaScript/SidebarComponent.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="app">
+        <navbar-component></navbar-component>
+        <div class="member-area">
+            <div class="content-wrapper">
+                <sidebar-component></sidebar-component>
+                <section class="main-content">
+                    <div class="profile-tabs">
+                        <a href="MemberInfo.html" class="tab-btn active">修改資料</a>
+                        <a href="MemberPassword.html" class="tab-btn">更新密碼</a>
+                    </div>
+                    <div v-if="isLoading" class="loading-message">正在載入用戶資料...</div>
+                    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+                    <div v-if="!isLoading && !errorMessage" class="member-info-container">
+                        <form @submit.prevent="submitForm">
+                            <div class="form-group" v-for="field in fields" :key="field.id">
+                                <label :for="field.id" class="form-label">{{ field.label }}</label>
+                                <input :type="field.type"
+                                       :id="field.id"
+                                       v-model="formData[field.id]"
+                                       class="form-input"
+                                       @blur="validateField(field.id)" />
+                                <span class="error-message text-danger" v-if="formErrors[field.id]">
+                                    {{ formErrors[field.id] }}
+                                </span>
+                            </div>
+                            <button type="submit" class="submit-btn" :disabled="isSubmitting">
+                                {{ isSubmitting ? '更新中...' : '儲存' }}
+                            </button>
+                        </form>
+</section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, reactive, ref, onMounted } = Vue;
+        const { getUserProfile, updateUserProfile } = useAuth();
+
+        const app = createApp({
+            components: {
+                "navbar-component": NavbarComponent,
+                'sidebar-component': SidebarComponent
+            },
+
+            setup() {
+                const formData = reactive({
+                    name: "",
+                    email: "",
+                    phoneNumber: "",
+                });
+
+                const formErrors = reactive({
+                    name: "",
+                    email: "",
+                    phoneNumber: "",
+                });
+
+                const fields = [
+                    { id: 'name', label: '姓名', type: 'text' },
+                    { id: 'email', label: '電子郵件', type: 'email' },
+                    { id: 'phoneNumber', label: '電話號碼', type: 'tel' },
+                ];
+
+                const isLoading = ref(true);
+                const isSubmitting = ref(false);
+                const errorMessage = ref('');
+
+                onMounted(async () => {
+                    try {
+                        const profile = await getUserProfile();
+                        Object.assign(formData, {
+                            name: profile.Name || "",
+                            email: profile.Email || "",
+                            phoneNumber: profile.PhoneNumber || "",
+                        });
+                        console.log('Profile loaded:', formData);
+                    } catch (error) {
+                        console.error("Error loading user profile:", error);
+                        errorMessage.value = "無法載入用戶資料，請稍後再試。";
+                    } finally {
+                        isLoading.value = false;
+                    }
+                });
+
+                const validateField = (fieldId) => {
+                    const validators = {
+                        name: (value) => value ? "" : "姓名不能為空",
+                        email: (value) => {
+                            if (!value) return "電子郵件不能為空";
+                            return /\S+@\S+\.\S+/.test(value) ? "" : "請輸入有效的電子郵件地址";
+                        },
+                        phoneNumber: (value) => {
+                            if (!value) return "電話號碼不能為空";
+                            return /^\d{10}$/.test(value) ? "" : "請輸入有效的10位數電話號碼";
+                        }
+                    };
+                    formErrors[fieldId] = validators[fieldId](formData[fieldId]);
+                };
+                const submitForm = async () => {
+                    isSubmitting.value = true;
+                    fields.forEach(field => validateField(field.id));
+
+                    if (Object.values(formErrors).every(error => error === "")) {
+                        try {
+                            const result = await updateUserProfile({
+                                Name: formData.name,
+                                Email: formData.email,
+                                PhoneNumber: formData.phoneNumber
+                            });
+                            console.log('Update result:', result); // 添加日誌
+                            if (result.Success) { // 注意這裡使用 'Success' 而不是 'success'
+                                alert(result.Message || "資料已成功更新");
+                            } else {
+                                alert("更新失敗：" + (result.Message || "未知錯誤"));
+                            }
+                        } catch (error) {
+                            console.error("Error updating profile:", error);
+                            alert("資料更新失敗：" + (error.message || "未知錯誤"));
+                        }
+                    } else {
+                        alert("請修正表單中的錯誤");
+                    }
+                    isSubmitting.value = false;
+                };
+
+                return {
+                    formData,
+                    formErrors,
+                    fields,
+                    isLoading,
+                    isSubmitting,
+                    errorMessage,
+                    submitForm,
+                    validateField,
+                };
+            },
+        });
+
+        app.mount("#app");
+    </script>
+</body>
+</html>

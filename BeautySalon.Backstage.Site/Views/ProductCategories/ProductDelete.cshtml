@@ -1,0 +1,234 @@
+﻿
+@{
+    ViewBag.Title = "ProductDelete";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刪除服務項目</title>
+    @*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">*@
+    @*    <link rel="stylesheet" href="~/Content/Css/ServiceItem/SerivceitemView.css">*@
+    @*<link rel="stylesheet" href="~/Content/Css/ServiceCategory/CategoryView.css">*@
+<style>
+        body {
+    font-weight: bold !important;
+}
+
+h3 {
+    margin: 10px;
+    padding: 20px 0 0 0 !important;
+    font-weight: bold !important;
+    text-align: center;
+    color: #776B5D !important;
+}
+
+.main {
+    margin: 0px 50px 50px 50px !important;
+    border-radius: 18px;
+    /*background-color: rgba(241, 243, 236, 0.5) !important;*/
+    /*background-color: #FAF4E3;*/
+    padding: 20px;
+}
+
+.row {
+    border-radius: 18px;
+    margin: 0px 50px 50px 50px !important;
+    gap: 20px;
+}
+
+.data {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: flex-end;
+}
+
+    .btn {
+        /*background-color: #c0bdb5 !important;*/
+        /*background-color: rgb(133,139,120,0.7) !important;*/
+        background-color: rgb(133,139,120,0.5) !important;
+        color: #fefefe !important;
+        border-radius: 15px !important;
+        width: 150px;
+        margin: 10px;
+        font-weight: bold !important;
+        display: inline-block !important;
+        white-space: nowrap !important;
+    }
+
+/* 列設定 */
+.col-md-4, .col-md-7 {
+    margin-top: 40px !important;
+    height: 400px !important;
+    box-sizing: border-box; /* 確保內邊距包含在總寬度中 */
+    color: rgb(96, 63, 38,0.8);
+}
+
+#Description {
+    height: 200px !important;
+}
+
+input, select, textarea {
+    /*background-color: rgba(202, 200, 212, 0.5) !important;*/
+    background-color: white !important;
+    color: rgb(96, 63, 38,0.8) !important;
+}
+
+/* 一般樣式 */
+.container-fluid {
+    /*padding: 0 20px; /* 調整容器內邊距 */
+    box-sizing: border-box; /* 確保內邊距包含在總寬度中 */
+}
+
+/* 表單組 */
+.form-group {
+    gap: 1px; /* 標籤和輸入框之間的間距 */
+    margin-bottom: 20px; /* 每個表單組下面的間距 */
+    margin-left: 30px;
+}
+
+    /* 固定寬度的標籤和輸入框 */
+    .form-group.flex-row label {
+        /*width: 150px; /* 固定標籤的寬度為150px */
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .form-group.flex-row input,
+    .form-group.flex-row select,
+    .form-group.flex-row textarea {
+        /*width: 250px; /* 固定輸入框的寬度為250px */
+        padding: 10px;
+        border: 1px solid rgba(242, 239, 229, 0.5); /* 調整邊框顏色 */
+        border-radius: 7px;
+        background-color: rgba(199, 200, 204, 0.3); /* 調整背景顏色 */
+        box-sizing: border-box; /* 確保邊框和內邊距包含在總寬度中 */
+    }
+
+.form-control {
+    flex: 1;
+    max-width: 100%;
+    width: 100%;
+    min-width: 250px !important;
+    height: 100%;
+    min-height: 52px; /* 設定最小高度，根據需要調整 */
+    box-sizing: border-box; /* 确保 padding 和 border 不会增加元素的总宽度 */
+    color: #A0937D !important; /* 你可以根據需求修改顏色 */
+    border: none;
+    background-color: white !important;
+}
+
+ul.dropdown-menu.show {
+    margin-top: 8px;
+    border: none;
+    border-radius: 0px;
+    background-color: rgb(197,207,178,1);
+}
+
+/* 下拉菜單 */
+.dropdown-menu {
+    background-color: #C5CFB2;
+    padding: 0px;
+    margin: 7px 5px 5px 5px;
+    position: static;
+    top: 90%;
+    left: 0;
+    min-width: 110px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 下拉菜單項目 */
+.dropdown-item {
+    color: #64695B;
+    font-weight: bold;
+    padding: 10px;
+    font-size: medium;
+    display: block;
+    margin: 1px;
+    width: 90%;
+}
+
+    .dropdown-item:hover {
+        background-color: rgb(165, 173, 149,0.5);
+        border-radius: 20px;
+    }
+
+</style>
+
+</head>
+
+<body>
+    <div id="navbar" class="sticky-top"></div>
+    <div class="container-fluid">
+        <div id="app" class="main">
+
+            <h3>刪除服務項目</h3>
+            <div class="data">
+                <button class="btn btn-delete" v-on:click="deleteService">確定刪除</button>
+                <button class="btn btn-back" v-on:click="goBack">返回</button>
+            </div>
+
+            <div class="row">
+                <!-- 第一欄 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="ServiceID" class="mb-2">項目編號</label>
+                        <input type="text" id="ProductId" class="form-control" v-model="service.ProductId" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="ServiceName" class="mb-2">項目名稱</label>
+                        <input type="text" id="ProductName" class="form-control" v-model="service.ProductName" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Price" class="mb-2">價格</label>
+                        <input type="number" id="Price" class="form-control" v-model="service.Price" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="Duration" class="mb-2">施作時間</label>
+                        <input type="number" id="Duration" class="form-control" v-model="service.Duration" disabled>
+                    </div>
+
+                </div>
+                <!-- 第二欄 -->
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <div v-if="categories.length > 0">
+                            <label for="CategoryId" class="mb-2">服務類別</label>
+
+                            <select id="CategoryId" class="form-select" v-model="service.CategoryId" disabled>
+                                <option value="" disabled selected>選擇服務類別</option>
+                                <option v-for="category in categories" :key="category.Id" :value="category.Id">
+                                    {{ category.CategoryName }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="CreatedDate" class="mb-2">建立日期</label>
+                        <input type="text"
+                               class="form-control"
+                               :value="formatDate(service.CreatedDate)"
+                               disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="Description" class="mb-2">描述</label>
+                        @*<input type="text" id="Description" class="form-control" v-model="service.Description" disabled>*@
+                        <textarea id="Description" class="form-control" v-model="service.Description" disabled rows="3" style="resize: none; text-align: left;"></textarea>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 引入 Vue 和 app.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.min.js"></script>
+    <script src="~/Scripts/JavaScripts/ServiceItem/serivceitem-mcv.js"></script>
+</body>
+</html>

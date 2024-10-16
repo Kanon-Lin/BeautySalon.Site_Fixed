@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Items</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../navbar/navbar.css">
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #f5f5f5;
+
+    }
+    .container{
+      padding-top: 80px;
+    }
+    .service-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      gap: 50px;
+    }
+    .service-image {
+      width: 500px;
+      height: auto;
+    }
+    .item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .item-left {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-right: 15px;
+    }
+    .item-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+    .price-info {
+      font-size: 1rem;
+      color: #555;
+    }
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .quantity-control button {
+      background-color: #e0e0e0;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      color: #555;
+    }
+    .cart-button {
+      background-color: #eaded4;
+      border: none;
+      margin-left: 10px;
+      border-radius: 10px !important;
+      font-size: 16px !important;
+      white-space: nowrap;
+      min-width: 70px;
+      text-align: center;
+    }
+    .floating-cart-btn {
+      width: 60px;
+      height: 60px;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: bottom 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    footer {
+        background-color: #b8afa6;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        width: 100%;
+      }
+
+    
+      .social-button {
+        text-decoration: none;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        font-size: 30px;
+        color: #fff;
+      }
+      .social-button:hover {
+        color: #686059;
+      }
+  </style>
+</head>
+<body>
+  <div id="app">
+  
+      <navbar ref="navbarRef"></navbar>
+
+    <div class="container">
+      <div class="service-container">
+        <div class="service-image">
+          <img src="../images/pic06.jpg" alt="Service Image" class="img-fluid" />
+        </div>
+        <div class="service-info fw-bolder">
+          <div v-for="(category, catIndex) in serviceCategories" :key="catIndex">
+              <h2>{{ category.CategoryName }}</h2>
+            <div class="item-row" v-for="(item, itemIndex) in category.Items" :key="itemIndex">
+              <div class="item-left me-5">
+                  <div class="item-title">{{ item.Name }}</div>
+                  <div class="price-info">
+                      施作時間：{{ item.Duration }}分鐘 | NT$ {{ item.Price }}
+                  </div>
+              </div>
+              <div class="quantity-control">
+                <button @click="decrementQuantity(catIndex, itemIndex)" class="me-3">-</button>
+                <span>{{ item.Quantity }}</span>
+                <button @click="incrementQuantity(catIndex, itemIndex)" class="ms-3 me-3">+</button>
+                <button class="cart-button" @click="addToCart(catIndex, itemIndex)">加入</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="floating-cart-btn" @click="goToCart">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </button>
+      </div>
+    </div>
+ 
+
+    <footer>
+      <p>
+        營業時間：早上10點至晚上8點<br />
+        地址：台北市大安區<br />
+        電話：02-1234-5678<br />
+        交通方式：捷運大安站2號出口步行3分鐘
+      </p>
+      <div class="socialMediaBtns">
+        <a href="#" class="social-button instagram me-3" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="#" class="social-button line me-3" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-line"></i>
+        </a>
+        <a href="#" class="social-button facebook" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-facebook-f"></i>
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+  <script type="module">
+    const { createApp, ref } = Vue;
+    
+    import { setupNavbar } from '../navbar/NavbarSetup.js';
+
+    const config = {
+      setup() {
+            const serviceCategories = ref([]);
+            fetch('/Products/Info')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Fetched data:', data); 
+                    serviceCategories.value = data;
+                })
+                .catch(error => console.error('Error fetching data:', error));
+
+
+            const incrementQuantity = (catIndex, itemIndex) => {
+                serviceCategories.value[catIndex].Items[itemIndex].Quantity++;
+        };
+
+            const decrementQuantity = (catIndex, itemIndex) => {
+                if (serviceCategories.value[catIndex].items[itemIndex].Quantity > 0) {
+                    serviceCategories.value[catIndex].items[itemIndex].Quantity--;
+          }
+        };
+
+            const addToCart = (catIndex, itemIndex) => {
+          const item = serviceCategories.value[catIndex].items[itemIndex];
+          alert(item.name + " 已加入購物車!");
+        };
+
+        const goToCart = () => {
+          window.location.href = "/cart.html";
+        };
+
+        return {
+          serviceCategories,
+          incrementQuantity,
+          decrementQuantity,
+          addToCart,
+          goToCart,
+        };
+      },
+    };
+
+    const app = createApp(config);
+
+    setupNavbar(app);
+
+    app.mount("#app");
+  </script>
+</body>
+</html>

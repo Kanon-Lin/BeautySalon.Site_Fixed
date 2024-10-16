@@ -1,0 +1,218 @@
+﻿/* 全局樣式 */
+body {
+    background-color: #e8e0d9;
+    font-family: "Arial", sans-serif;
+}
+
+/* 主要內容容器 */
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 120px 30px;
+}
+
+/* 表單容器 */
+.main-content {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    width: 60%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 標題樣式 */
+h1 {
+    text-align: center;
+    color: #374151;
+    margin-bottom: 30px;
+}
+
+    h1 i {
+        margin-right: 10px; /* 調整圖標和文字之間的間距 */
+    }
+
+/* 提示訊息 */
+.alert.alert-info {
+    background-color: #f0f0f0;
+    color:red ;
+    
+}
+
+
+/* 購物車項目 */
+.cart-item {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 15px 0;
+    font-weight: 600;
+}
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+.order-header h5 {
+    color: #184642;
+    font-weight: 600;
+}
+
+.order-body .order-details {
+    color: #555;
+}
+
+/* 自定義移除按鈕樣式 */
+button.remove{
+    border:none;
+    background:none;
+    padding:0;
+    margin:0;
+    cursor:pointer;
+    outline:none;
+    box-shadow:none;
+}
+    button.remove i.fa-solid.fa-trash {
+        color: #db1a1a;
+        font-size:1.2rem;
+    }
+
+    button.remove:hover{
+        opacity:0.8;
+    }
+    button.remove:active,
+    button.remove:focus{
+        outline:none;
+        box-shadow:none;
+    }
+
+
+    /* 數量控制按鈕 */
+    .quantity-controls button {
+        background-color: #e0e0e0;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 1rem;
+        color: #555;
+    }
+
+.quantity-controls span {
+    margin: 0 10px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.btn-continue-shopping,
+.btn-primary.order-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 0 0 30%; /* 設置按鈕寬度為容器的 48%，留出一些間距 */
+    max-width: 250px; /* 設置最大寬度，避免在大屏幕上過寬 */
+}
+
+.btn-continue-shopping {
+    background-color: rgba(24, 70, 66, 0.1);
+    color: #184642;
+    border: 1px solid #184642;
+}
+
+    .btn-continue-shopping:hover {
+        background-color: rgba(24, 70, 66, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+.btn-primary.order-button {
+    background-color: #184642;
+    color: #fff;
+    border: none;
+}
+
+    .btn-primary.order-button:hover {
+        background-color: #22635d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+.btn-continue-shopping i {
+    margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+    .button-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-continue-shopping,
+    .btn-primary.order-button {
+        width: 100%;
+        max-width: none;
+        margin-bottom: 15px;
+    }
+}
+
+/* 總計區域 */
+.total-section h5 {
+    color: #184642;
+    font-weight: 600;
+}
+
+/* 折扣區域 */
+.discount-section h5 {
+    color: #555;
+}
+
+/* 模態視窗樣式 */
+.modal-content {
+    border-radius: 15px;
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}
+
+.modal-title {
+    color: #184642;
+    font-weight: 600;
+    align-items: center;
+}
+
+.modal-body p {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.modal-body .modal-text {
+    display: inline-block;
+    
+}
+
+.modal-body {
+    text-align: center;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+    .modal-footer .btn-primary {
+        background-color: #184642;
+        border: none;
+    }
+
+        .modal-footer .btn-primary:hover {
+            background-color: #22635d;
+        }

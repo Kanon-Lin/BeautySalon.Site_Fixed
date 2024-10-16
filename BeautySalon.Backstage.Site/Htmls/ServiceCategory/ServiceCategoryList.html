@@ -1,0 +1,68 @@
+<!--<!DOCTYPE html>-->
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>服務類別列表</title>
+    <link rel="stylesheet" href="/Content/Css/style.css"/>
+  </head>
+
+  <body>
+    <div id="navbar" class="sticky-top"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="app" class="main">
+          <!-- app叫用js -->
+          <h3>服務類別列表</h3>
+
+          <div class="search-bar">
+            <input type="text" v-model="searchTerm" placeholder="請輸入類別名稱" class="form-control" />
+          <button class="btn btn-search" @click="searchCategory">查詢</button>
+          <button class="btn btn-add" @click="addCategory">新增類別</button>
+        </div>
+          <div class="table-container">
+            <table class="table table-hover">
+              <!-- 以下內容會隨著主題不同而改變 -->
+              <thead>
+                <tr>
+                  <th style="width: 15%">類別編號</th>
+                  <th style="width: 25%">類別名稱</th>
+                  <th style="width: 40%">描述</th>
+                  <th style="width: 20%">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="category in filteredCategorys" :key="category.Id">
+                    <td class="data" style="width: 15%">{{ category.Id }}</td>
+                    <td class="data" style="width: 25%">{{ category.CategoryName }}</td>
+                    <td class="data" style="width: 40%">
+                        {{ category.Description }}
+                    </td>
+                    <td class="operate" style="width: 20%">
+                        <button
+                            class="btn btn-custom"
+                            @click="editCategory(category.Id)"
+                        >
+                            編輯
+                        </button>
+                        <button
+                            class="btn btn-custom"
+                            @click="deleteCategory(category.Id)"
+                        >
+                            刪除
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--<script src="../script.js" defer></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/Scripts/JavaScripts/ServiceCategory/categorylist.js" defer></script>
+  </body>
+</html>

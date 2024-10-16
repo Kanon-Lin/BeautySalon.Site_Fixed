@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>會員登入</title>
+    <link rel="stylesheet" href="../Css/Login.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+    <link rel="stylesheet" href="../Css/navbar.css" />
+    <script src="../JavaScript/NavbarComponent.js"></script>
+</head>
+<body>
+    <div id="app">
+        <navbar-component></navbar-component>
+        <div class="login-container">
+            <h2>會員登入</h2>
+            <form @submit.prevent="handleLogin">
+                <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+                <div class="form-group">
+                    <label for="account">帳號：</label>
+                    <input type="text" id="account" v-model="account" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">密碼：</label>
+                    <input type="password" id="password" v-model="password" class="form-control" required />
+                </div>
+                <button type="submit" class="custom-btn">登入</button>
+            </form>
+            <a href="#" class="forgot-password" @click="showForgotPasswordModal">忘記密碼？</a>
+        </div>
+        <!-- 忘記密碼的彈出視窗 -->
+        <div class="modal" :style="{ display: isForgotPasswordVisible ? 'flex' : 'none' }">
+            <div class="modal-content">
+                <h3>請輸入您的電子郵件</h3>
+                <input type="email" v-model="email" placeholder="電子郵件" class="form-control" required />
+                <p>密碼重置郵件會寄送至您註冊使用之電子郵件信箱</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn" @click="sendResetLink">確定</button>
+                    <button class="modal-btn close-modal" @click="closeForgotPasswordModal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+        const { login } = window.useAuth();
+
+        const app = createApp({
+            components: {
+                "navbar-component": NavbarComponent,
+            },
+            setup() {
+                const account = ref("");
+                const password = ref("");
+                const email = ref("");
+                const errorMessage = ref("");
+                const isForgotPasswordVisible = ref(false);
+                const returnUrl = ref("");
+
+                onMounted(() => {
+                    // 檢查 URL 參數中是否有 returnUrl
+                    const urlParams = new URLSearchParams(window.location.search);
+                    returnUrl.value = urlParams.get('returnUrl');
+                });
+
+                const handleLogin = async () => {
+                    try {
+                        const result = await login({ account: account.value, password: password.value });
+                        if (result.success) {
+                            // 登入成功
+                            // 不需要對購物車數據做任何處理，因為它們已經在 localStorage 中
+                            if (returnUrl.value) {
+                                window.location.href = decodeURIComponent(returnUrl.value);
+                            } else {
+                                window.location.href = "/Html/HomePage.html";
+                            }
+                        } else {
+                            errorMessage.value = result.message || "登入失敗，請檢查您的帳號和密碼";
+                        }
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        errorMessage.value = "登入時發生錯誤，請稍後再試";
+                    }
+                };
+
+                const showForgotPasswordModal = () => {
+                    isForgotPasswordVisible.value = true;
+                };
+
+                const closeForgotPasswordModal = () => {
+                    isForgotPasswordVisible.value = false;
+                    email.value = "";
+                };
+
+                const sendResetLink = () => {
+                    if (email.value) {
+                        // 這裡應該實現發送重置密碼郵件的邏輯
+                        alert("密碼重設連結已發送到您的電子郵件！");
+                        closeForgotPasswordModal();
+                    } else {
+                        alert("請輸入電子郵件！");
+                    }
+                };
+
+                return {
+                    account,
+                    password,
+                    email,
+                    errorMessage,
+                    isForgotPasswordVisible,
+                    handleLogin,
+                    showForgotPasswordModal,
+                    closeForgotPasswordModal,
+                    sendResetLink,
+                };
+            },
+        }).mount("#app");
+    </script>
+</body>
+</html>

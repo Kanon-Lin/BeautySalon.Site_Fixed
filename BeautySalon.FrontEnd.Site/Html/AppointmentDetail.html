@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>預約明細</title>
+
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+    <script src="../JavaScript/orderService.js"></script>
+    <script src="../JavaScript/NavbarComponent.js"></script>
+    <script src="../JavaScript/SidebarComponent.js"></script>
+    <link rel="stylesheet" href="../Css/navbar.css" />
+    <link rel="stylesheet" href="/Css/Sidebar.css" />
+    <style >
+        body {
+            background-color: #e8e0d9 !important;
+            color: #7d6958;
+            font-family: "Arial", sans-serif;
+        }
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 120px 30px;
+        }
+
+        .main-content {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            width: 80%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 表格樣式 */
+        .table {
+            border-collapse: collapse; /* 移除格線 */
+            border: none;
+            width: 100%; /* 設定表格寬度為 100% */
+        }
+
+        /* 表頭與內容不同的背景色 */
+        thead th{
+            background-color: #e7dfd8; /* 設置表頭背景色 */
+            color: #7d6958;
+            padding: 15px;
+            vertical-align: middle;
+            text-align: left;
+        }
+        tbody {
+            width: 100%;
+        }
+        tbody td {
+            padding: 15px; /* 調整這個值以增加行高 */
+            /* 您也可以添加其他樣式，例如 */
+            vertical-align: middle; /* 使內容垂直居中 */
+            text-align: left;
+            background-color: #ffffff; /* 設置明細背景色 */
+            color: #7d6958;
+        }
+
+        /* 去掉直格線 */
+        td,
+        th {
+            border-left: none !important; /* 移除左側的格線 */
+            border-right: none !important; /* 移除右側的格線 */
+        }
+
+        /* 分頁按鈕樣式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            list-style-type: none;
+        }
+
+            .pagination li {
+                margin: 0 5px;
+            }
+
+            .pagination .page-link {
+                color: #b8afa6;
+                background-color: white;
+                border: 1px solid #b8afa6;
+                padding: 5px 12px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .pagination .page-item.active .page-link {
+                background-color: #b8afa6;
+                color: white;
+            }
+
+            .pagination .page-link:hover {
+                background-color: #b8afa6;
+                color: white;
+            }
+
+            .pagination .disabled {
+                opacity: 0.6;
+                pointer-events: none;
+            }
+        .btn {
+            background-color: #e4937e;
+            color: #ffffff;
+            border: none;
+            width: auto;
+            padding: 10px;
+            margin: 0 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+            .btn:disabled {
+                background-color: #d1ada3; /* 禁用狀態的背景顏色 */
+                color: #ffffff; /* 禁用狀態的文字顏色 */
+                border: none; /* 無邊框 */
+                cursor: not-allowed; /* 禁止的游標 */
+                opacity: 0.6; /* 透明度 */
+            }
+
+        .tab-btn {
+            position: relative;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            text-decoration: none;
+            background-color: transparent;
+            border: none;
+            transition: color 0.3s ease-in-out;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+            .tab-btn.active {
+                color: #184642;
+                font-weight: 600;
+            }
+
+        .headers {
+            display: flex;
+            justify-content: space-between; /* 讓 h2 與 select 左右對齊 */
+            align-items: center;
+            margin-bottom: 20px; /* 與表格間距 */
+        }
+            .headers select {
+                align-self: center; /* 讓 select 向下對齊 */
+                height: 40px; /* 控制 select 高度 */
+                margin-right: 150px; /* 靠右對齊 */
+                padding: 8px; /* 增加內部間距 */
+                font-size: 14px; /* 字體大小 */
+                border: 2px solid #b8afa6; /* 邊框顏色和粗細 */
+                border-radius: 15px; /* 圓角效果 */
+                background-color: #ffffff; /* 背景色 */
+                color: #7d6958; /* 字體顏色 */
+                outline: none; /* 移除點擊時的輪廓 */
+                cursor: pointer; /* 鼠標變為指標 */
+            }
+                .headers select:focus {
+                    border-color: #85786d; /* 聚焦時邊框顏色 */
+                    box-shadow: 0 0 5px rgba(228, 147, 126, 0.5); /* 聚焦時的陰影效果 */
+                }
+
+</style>
+
+    <!-- 引入 Bootstrap 和 Font Awesome -->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          rel="stylesheet" />
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- SweetAlert2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+    <div id="app">
+        <navbar-component></navbar-component>
+            <form>
+                <div class="content-wrapper">
+                        <!-- 側邊欄位置 -->
+                            <sidebar-component></sidebar-component>
+
+                        <!-- 預約列表 -->
+                            <div class="main-content">
+                                <div class="headers">
+                                    <h2 class="tab-btn active">我的預約</h2>
+                                    <select v-model="selectedFilter" @change="applyFilter">
+                                        <option value="all">所有預約</option>
+                                        <option value="future">尚未完成的預約</option>
+                                        <option value="past">已結束/已取消</option>
+                                    </select>
+                                </div>
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>已預約服務項目</th>
+                                            <th>美容師</th>
+                                            <th>日期</th>
+                                            <th>時段</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="appointment in paginatedFilteredAppointments" :key="appointment.AppointmentDetailId">
+                                            <td>{{ appointment.ServiceName }}</td>
+                                            <td>{{ appointment.Beautician }}</td>
+                                            <td>{{ appointment.Date }}</td>
+                                            <td>{{ appointment.TimeSlot }}</td>
+                                            <td>
+                                                <button class="btn"
+                                                        type="button"
+                                                        @click="cancelAppointment(appointment.AppointmentDetailId)"
+                                                        :disabled="appointment.Status === 2 || appointment.Status === 3 || isCanceling || isPastOrToday(appointment.Date)">
+                                                    取消
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Vue.js 分頁功能 -->
+                                <ul class="pagination">
+                                    <li :class="['page-item', { disabled: currentPage === 1 }]">
+                                        <span class="page-link" @click="changePage(currentPage - 1)"><i class="fas fa-chevron-left"></i></span>
+                                    </li>
+                                    <li v-for="page in totalPages" :key="page" :class="['page-item', { active: currentPage === page }]">
+                                        <span class="page-link" @click="changePage(page)">{{ page }}</span>
+                                    </li>
+                                    <li :class="['page-item', { disabled: currentPage === totalPages }]">
+                                        <span class="page-link" @click="changePage(currentPage + 1)"><i class="fas fa-chevron-right"></i></span>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+            </form>
+        </div>
+
+    <script src="https://unpkg.com/vue@3.5.10/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        const config = {
+            components: {
+                'navbar-component': NavbarComponent,
+                'sidebar-component': SidebarComponent,
+            },
+            setup() {
+                const appointments = ref([]);
+                const filteredAppointments = ref([]);
+                const currentPage = ref(1);
+                const itemsPerPage = 10;
+                const isCanceling = ref(false);
+                const selectedFilter = ref('all'); // 預設篩選條件為顯示所有預約
+
+                const isPastOrToday = (appointmentDate) => {
+                    const currentDate = new Date();
+                    const appointmentDateObj = new Date(appointmentDate);
+                    appointmentDateObj.setHours(0, 0, 0, 0);
+                    currentDate.setHours(0, 0, 0, 0);
+                    return appointmentDateObj <= currentDate;
+                };
+
+                const getAuthHeaders = () => {
+                    const token = authService.getTokenFromCookie();
+                    return {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    };
+                };
+
+                const totalPages = computed(() => {
+                    return Math.ceil(filteredAppointments.value.length / itemsPerPage);
+                });
+
+                const paginatedFilteredAppointments = computed(() => {
+                    const start = (currentPage.value - 1) * itemsPerPage;
+                    return filteredAppointments.value.slice(start, start + itemsPerPage);
+                });
+
+                const changePage = (page) => {
+                    if (page >= 1 && page <= totalPages.value) {
+                        currentPage.value = page;
+                    }
+                };
+
+                const applyFilter = () => {
+                    if (selectedFilter.value === 'future') {
+                        filteredAppointments.value = appointments.value.filter(app => app.Status === 1 && !isPastOrToday(app.Date));
+                    } else if (selectedFilter.value === 'past') {
+                        filteredAppointments.value = appointments.value.filter(app => app.Status === 2 || isPastOrToday(app.Date));
+                    } else {
+                        filteredAppointments.value = appointments.value; // 顯示所有預約
+                    }
+                    currentPage.value = 1; // 切換篩選後重置頁碼為第一頁
+                };
+
+                const loadAppointments = async () => {
+                    try {
+                        const response = await fetch(`/api/AppointmentApi/GetAppointmentDetail`, {
+                            method: 'GET',
+                            headers: getAuthHeaders()
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            appointments.value = data;
+                            filteredAppointments.value = data; // 預設顯示所有預約
+                        } else {
+                            const errorData = await response.json();
+                            console.error('無法獲取預約資料:', response.status, errorData);
+                        }
+                    } catch (error) {
+                        console.error('獲取預約資料時出錯:', error);
+                    }
+                };
+
+                const cancelAppointment = async (id) => {
+                    if (isCanceling.value) return;
+
+                    const appointment = appointments.value.find((app) => app.AppointmentDetailId === id);
+                    if (!appointment) {
+                        alert('未找到此預約!');
+                        return;
+                    }
+
+                    const result = await Swal.fire({
+                        title: "你確定要取消這個預約嗎？",
+                        text: "若要再次預約請前往我的明細頁面",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#e4937e",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "是的"
+                    });
+
+                    if (result.isConfirmed) {
+                        isCanceling.value = true;
+                        try {
+                            const response = await fetch(`/api/AppointmentApi/CancelAppointment/${id}`, {
+                                method: 'POST',
+                                headers: getAuthHeaders(),
+                            });
+
+                            if (response.ok) {
+                                appointment.Status = 2;
+                                Swal.fire({
+                                    title: "取消成功",
+                                    text: "您的預約已取消。",
+                                    icon: "success"
+                                });
+                            } else {
+                                const errorData = await response.json();
+                                Swal.fire('取消失敗，請稍後再試!', '', 'error');
+                            }
+                        } catch (error) {
+                            Swal.fire('發生錯誤，請稍後再試!', '', 'error');
+                        } finally {
+                            isCanceling.value = false;
+                        }
+                    }
+                };
+
+                onMounted(() => {
+                    loadAppointments();
+                });
+
+                return {
+                    isCanceling,
+                    appointments,
+                    filteredAppointments,
+                    currentPage,
+                    totalPages,
+                    paginatedFilteredAppointments,
+                    changePage,
+                    cancelAppointment,
+                    isPastOrToday,
+                    selectedFilter,
+                    applyFilter
+                };
+            },
+        };
+
+        const app = createApp(config);
+        app.mount('#app');
+    </script>
+</body>
+</html>

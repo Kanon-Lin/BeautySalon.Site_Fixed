@@ -1,0 +1,163 @@
+﻿/* login.css */
+
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5; /* Light background similar to your design */
+}
+
+.login-container {
+    width: 45%;
+    margin: 100px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .login-container h2 {
+        margin-bottom: 20px;
+        color: #3c3c3c;
+        font-weight: 700;
+    }
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #3c3c3c;
+    font-weight: 600;
+}
+
+input {
+    width: calc(100% - 20px);
+    padding: 8px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
+
+/* login.css */
+.login-container .custom-btn {
+    width: 50% !important;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #e0ded9;
+    color: #3c3c3c;
+    border: none;
+    border-radius: 20px !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+    display: block;
+    margin: 0 auto !important;
+}
+
+    .login-container .custom-btn:hover {
+        background-color: #d2d0cb !important;
+    }
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #3c3c3c;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* 更新模態框樣式 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    /* 使用 flexbox 居中內容 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 400px;
+    /* 添加圓角和陰影效果 */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 添加一些額外的樣式來美化模態框 */
+.modal h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.modal input[type="email"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.modal p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 新的按鈕容器樣式 */
+.modal-buttons {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    gap: 20px; /* 按鈕之間的間距 */
+    margin-top: 20px;
+}
+
+.modal-btn {
+    width: 20% !important; /* 保持按鈕寬度為原來的20% */
+    padding: 8px 0;
+    background-color: #e0ded9;
+    color: #3c3c3c;
+    border: none;
+    border-radius: 20px !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+    font-size: 14px; /* 調整字體大小以適應按鈕大小 */
+    text-align: center; /* 確保文字居中 */
+}
+
+    .modal-btn:hover {
+        background-color: #d2d0cb !important;
+    }
+
+    /* 確保 close-modal 按鈕與其他按鈕樣式一致 */
+    .modal-btn.close-modal {
+        background-color: #e0ded9;
+    }
+
+        .modal-btn.close-modal:hover {
+            background-color: #d2d0cb !important;
+        }

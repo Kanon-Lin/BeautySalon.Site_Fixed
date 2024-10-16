@@ -1,0 +1,115 @@
+.row {
+    margin: 20px 50px 50px 50px !important;
+    background-color: rgba(241, 243, 236, 0.7) !important;
+    border-radius: 18px;
+}
+
+h3 {
+    margin: 10px;
+    padding: 10px 0 0 0 !important;
+    font-weight: bold !important;
+    text-align: center;
+    color: #776B5D !important;
+}
+
+.main {
+    padding: 30px;
+    border-radius: 18px;
+    background-color: #FAF4E3;
+}
+
+.search-bar {
+    margin-bottom: 10px !important;
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    width: 40%;
+}
+
+form {
+    width: 100%;
+    max-width: 100%;
+}
+
+.form-control {
+    flex: 1;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box; /* 确保 padding 和 border 不会增加元素的总宽度 */
+    color: #A0937D !important; /* 你可以根據需求修改顏色 */
+}
+
+    .form-control::placeholder {
+        color: #8E806A !important; /* 設置 placeholder 文字顏色為灰色 */
+        opacity: 1; /* 確保顏色應用於 placeholder */
+    }
+
+.btn {
+    color: #fefefe !important;
+    border-radius: 10px !important;
+    margin: 15px;
+    font-weight: bold !important;
+    background-color: rgb(133,139,120,0.5) !important;
+    height: 40px;
+}
+
+.btn-custom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-add {
+    padding: 9px 16px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.table {
+    margin: 25px !important;
+    width: 95% !important;
+    border-collapse: separate;
+    border-spacing: 2px 2px; /* 設置水平間隔為 15px，垂直間隔為 10px */
+    border-radius: 10px !important;
+    overflow: hidden;
+    box-sizing: border-box !important;
+    vertical-align: middle !important; /* 垂直居中 */
+}
+
+.table-container {
+    /*max-height: 250px;*/
+    overflow-y: auto; /* 添加纵向滚动条 */
+    display: block;
+    width: 100%;
+    border-radius: 10px !important;
+}
+
+.table thead th {
+    /*background-color: rgb(218, 208, 194,0.4);*/
+    background-color: #CDD5C6 !important;
+    text-align: center;
+    padding: 10px;
+    color: rgb(179, 163, 152) !important;
+    margin: 2px !important;
+}
+
+.table td {
+    text-align: left;
+    color: rgb(96, 63, 38,0.8) !important;
+    padding-left: 20px !important;
+    font-weight: bold;
+    background-color: rgb(247, 249, 242,0.7) !important;
+    height: 80px;
+}
+
+.operate {
+    width: 100% !important;
+    text-align: center !important;
+    margin: 0px !important;
+    padding: 2px 0px 2px 0px;
+    display: flex; /* 使用 Flexbox */
+    align-items: center; /* 垂直置中 */
+}
+
+.table td.operate button {
+    margin: 0 10px !important; /* 按钮间距 */
+}

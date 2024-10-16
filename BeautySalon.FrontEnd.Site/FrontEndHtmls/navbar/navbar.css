@@ -1,0 +1,206 @@
+/* navbar.css */
+.main-header {
+  background-color: #e7dfd8;
+  width: 100%;
+  padding: 4px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-hidden {
+  transform: translateY(-100%);
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-wrap: nowrap;
+  height: 60px; /* 設定一個固定高度 */
+}
+
+.logo-link {
+  display: block;
+}
+
+.logo {
+  width: 120px; /* 稍微縮小 logo */
+  height: auto;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-item {
+  color: #625e4e;
+  font: 700 16px "Arial", sans-serif; /* 稍微縮小字體 */
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 5px 0;
+  position: relative;
+}
+
+.nav-item::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fff8e4;
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-item:hover::after {
+  width: 100%;
+}
+
+.user-info {
+  position: relative;
+}
+
+.user-greeting {
+  color: #fffff0;
+  font: 600 16px "Arial", sans-serif;
+}
+
+.login-btn,
+.logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f1ebe5;
+  color: #333;
+  border-radius: 20px;
+  padding: 8px 16px;
+  border: 1px solid #d0d0d0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+
+.login-btn:hover,
+.logout-btn:hover {
+  background-color: #ede3c5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.logout-icon {
+  width: 16px;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.logout-btn:hover .logout-icon {
+  transform: translateX(2px);
+}
+
+/* 会员专区下拉菜单样式 */
+.nav-item.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fdf3d4;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  padding: 8px 0;
+  min-width: 150px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  font: 600 16px "Arial", sans-serif;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.dropdown-item:hover {
+  background-color: #ede3c5;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .navbar {
+    justify-content: flex-start; /* 左對齊 */
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    flex-direction: column;
+    background-color: #b68b5e;
+    width: 100%;
+    align-items: flex-start;
+    padding: 10px 0;
+    display: none;
+  }
+
+  .navbar.expanded .nav-links {
+    display: flex;
+  }
+
+  .user-actions {
+    margin-left: auto; /* 將用戶操作區域推到右側 */
+    display: flex;
+    align-items: center;
+  }
+
+  .hamburger-menu {
+    display: block;
+    cursor: pointer;
+    margin-right: 15px; /* 在漢堡選單和登入按鈕之間增加一些間距 */
+  }
+
+  .hamburger-menu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #fffff0;
+    margin: 5px 0;
+    transition: 0.4s;
+  }
+
+  .navbar.expanded .hamburger-menu span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+  }
+
+  .navbar.expanded .hamburger-menu span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .navbar.expanded .hamburger-menu span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+  }
+}

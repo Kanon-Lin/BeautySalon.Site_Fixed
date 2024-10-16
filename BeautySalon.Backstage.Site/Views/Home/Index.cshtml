@@ -1,0 +1,311 @@
+﻿@model BeautySalon.Backstage.Site.Models.ViewModels.HomePageVm
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>網站首頁</title>
+
+    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        /*首頁樣式*/
+        body {
+            background-color: #FAF4E3;
+            color: #776B5D !important;
+        }
+
+        .index {
+            margin: 20px 50px 50px 50px !important;
+        }
+
+        .card-header {
+        }
+        /* 主內容區域樣式 */
+        .content-container {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            /* height: 100%; */
+            flex: 1;
+            /* 使其填滿剩餘空間 */
+        }
+
+        /* 主內容樣式 */
+        .main-content {
+            /* 淺灰色背景 */
+            background-color: rgb(242, 239, 230,0.8);
+            padding: 5px;
+            margin: 4px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            border-radius: 15px;
+        }
+
+        /* 上部和下部內容區域樣式 */
+        .content {
+            font-weight: bold;
+            font-size: large !important;
+            background-color: rgb(199, 200, 204, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+            flex: 1;
+        }
+
+        /* 行事曆容器樣式 */
+        .calendar-container {
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            /* 使內部元素垂直排列 */
+            height: 100%;
+            /* 使其填滿剩餘空間 */
+        }
+
+        /* 行事曆樣式 */
+        .calendar {
+            background-color: rgb(205,213,198,0.4) !important;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        /* 行事曆標頭樣式 */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            color: #A0937D;
+            font-weight: bold;
+        }
+
+        h5 {
+            margin-top: 5px !important;
+            font-weight: bold;
+        }
+
+        li {
+            font-size: 18px; /* 調整 li 的字體大小 */
+            font-weight: bold; /* 調整 li 的字體粗細 */
+            margin-bottom: 5px; /* 調整每個預約項之間的間距 */
+        }
+
+        /* 行事曆日期格樣式 */
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            /* 7 columns for days of the week */
+            gap: 5px;
+            overflow-y: auto;
+        }
+
+            /* 每天格樣式 */
+            .calendar-days div {
+                display: flex;
+                justify-content: center !important;
+                align-items: center;
+                border: 2px solid rgb(208, 184, 168,0.3);
+                border-radius: 10px;
+                width: 100%;
+                height: 80px;
+            }
+
+        .calendar-day-name {
+            font-weight: bold;
+            background-color: rgb(205,213,198,0.8) !important;
+            border: 0px solid !important;
+            height: 50px !important;
+        }
+
+        /* 今日樣式 */
+        .calendar-days div.today {
+            background-color: #C5CFB2 !important;
+            color: white !important;
+        }
+
+        /* 每天格懸停效果 */
+        .calendar-days div:hover {
+            background-color: #CDD5C6 !important;
+            color: rgb(141, 73, 58) !important;
+        }
+
+        .selected-date {
+            background-color: rgb(165, 173, 149,0.7) !important;
+            color: white !important;
+        }
+
+        .btn {
+            background-color: rgb(133,139,120,0.7) !important;
+            margin-left: 10px;
+            color: antiquewhite !important;
+            font-weight: bold !important;
+        }
+
+        a {
+            color: #776B5D !important;
+        }
+
+        .text-red {
+            color: #D91656 !important;
+        }
+
+        .text-blue {
+            color: #4379F2 !important;
+        }
+    </style>
+</head>
+<body>
+   
+    <div class="container-fluid">
+        <div class="row index">
+            <!-- 左側行事曆 start-->
+            <div class="col-md-5 col-lg-5 calendar-container">
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <button class="btn" id="prevMonth">‹</button>
+                        <h4>@Model.SelectedDate.ToString("yyyy年MM月")</h4>
+                        <button class="btn" id="nextMonth">›</button>
+                        <button class="btn" id="todayButton">今日</button>
+                    </div>
+                    <div class="calendar-days">
+                        <div class="calendar-day-name">一</div>
+                        <div class="calendar-day-name">二</div>
+                        <div class="calendar-day-name">三</div>
+                        <div class="calendar-day-name">四</div>
+                        <div class="calendar-day-name">五</div>
+                        <div class="calendar-day-name">六</div>
+                        <div class="calendar-day-name">日</div>
+
+                        @* 計算當前月份的第一天和最後一天 *@
+                        @{
+                            var firstDayOfMonth = new DateTime(Model.SelectedDate.Year, Model.SelectedDate.Month, 1);
+                            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                            var daysInMonth = Enumerable.Range(0, (lastDayOfMonth - firstDayOfMonth).Days + 1)
+                                                        .Select(d => firstDayOfMonth.AddDays(d));
+                            var firstDayOfWeek = firstDayOfMonth.DayOfWeek;
+                            var emptyDays = (firstDayOfWeek == DayOfWeek.Sunday) ? 6 : (int)firstDayOfWeek - 1; // Offset to start on Monday
+                        }
+
+                        @* 空白日格 *@
+                        @for (var i = 0; i < emptyDays; i++)
+                        {
+                            <div></div>
+                        }
+
+                        @* 當月的日期 *@
+                        @foreach (var date in daysInMonth)
+                        {
+                            // 判斷是否為當月的今天
+                            var isToday = (date.Year == DateTime.Today.Year &&
+                                           date.Month == DateTime.Today.Month &&
+                                           date.Day == DateTime.Today.Day);
+
+                            // 判斷是否為選擇的日期
+                            var isSelectedDate = Model.SelectedDate.Date == date.Date;
+
+                            // 設定 class 名稱
+                            var className = isToday ? "calendar-day today" : (isSelectedDate ? "calendar-day selected-date" : "calendar-day default");
+
+                            <div class="@className">
+                                <a href="@Url.Action("Index", new { selectedDate = date.ToString("yyyy-MM-dd"), searchTerm = ViewBag.SearchTerm })"
+                                   style="text-decoration: none; display: block; padding: 0px;"
+                                   onmouseover="this.classList.add('hover');"
+                                   onmouseout="this.classList.remove('hover');">
+                                    @date.Day
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- 左側行事曆 end-->
+            <!-- 右側內容區域 stard-->
+            <div class="col-md-7 col-lg-7 content-container">
+                <div class="content">
+                    <!-- 顯示當日預約 -->
+                    <h5>當日預約 ( @Model.SelectedDate.ToShortDateString() )</h5>
+                    @if (Model.Appointments != null && Model.Appointments.Any())
+                    {
+                        <ul>
+                            @foreach (var appointment in Model.Appointments)
+                            {
+                                <li>
+                                    @*@appointment.AppointmentStart.ToShortTimeString()&nbsp;&nbsp;*@
+                                    @appointment.AppointmentStart.ToString("HH:mm")&nbsp;&nbsp;  @* 使用 24 小時制 *@
+                                    @appointment.ServiceName &nbsp;&nbsp;
+                                    @appointment.Nickname
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>無預約</p>
+                    }
+                </div>
+                <div class="content">
+                    <h5>待處理訂單</h5>
+                    @if (Model.Orders != null && Model.Orders.Any())
+                    {
+                        <ul>
+                            @foreach (var order in Model.Orders)
+                            {
+                                <li class="@(order.OrderStatus == 1 ? "text-blue" : (order.OrderStatus == 3 ? "text-red" : ""))">
+                                    訂單ID : @order.OrderID  &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;
+                                    @{
+                                        string statusText = order.OrderStatus == 1 ? "未付款" : (order.OrderStatus == 3 ? "待退款" : "其他狀態");
+                                    }
+                                    @statusText
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>無訂單</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const todayButton = document.getElementById("todayButton");
+        const prevMonthButton = document.getElementById("prevMonth");
+        const nextMonthButton = document.getElementById("nextMonth");
+
+        // 直接在這裡獲取格式化的日期字串
+        const selectedDate = new Date('@Model.SelectedDate.ToString("yyyy-MM-dd")'); // 使用 Razor 直接生成日期
+
+        const goToToday = () => {
+            window.location.href = "@Url.Action("Index", new { selectedDate = DateTime.Today.ToString("yyyy-MM-dd"), searchTerm = ViewBag.SearchTerm })";
+        };
+
+        const updateMonth = (offset) => {
+            const newDate = new Date(selectedDate);
+            newDate.setMonth(newDate.getMonth() + offset);
+            window.location.href = "@Url.Action("Index", new { selectedDate = "__date__", searchTerm = ViewBag.SearchTerm })".replace("__date__", newDate.toISOString().split('T')[0]);
+        };
+
+        prevMonthButton.addEventListener("click", () => updateMonth(-1));
+        nextMonthButton.addEventListener("click", () => updateMonth(1));
+        todayButton.addEventListener("click", goToToday);
+    });
+    </script>
+</body>
+</html>

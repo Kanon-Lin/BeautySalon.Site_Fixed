@@ -1,0 +1,528 @@
+﻿
+@model BeautySalon.Backstage.Site.Models.ViewModels.OrderVm
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        ul.dropdown-menu.show {
+            margin-top: 8px;
+            border: none;
+            border-radius: 0px;
+            background-color: rgb(197,207,178,1);
+        }
+
+        /* 下拉菜單 */
+        .dropdown-menu {
+            background-color: #C5CFB2;
+            padding: 0px;
+            margin: 7px 5px 5px 5px;
+            position: static;
+            top: 90%;
+            left: 0;
+            min-width: 110px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 下拉菜單項目 */
+        .dropdown-item {
+            color: #64695B;
+            font-weight: bold;
+            padding: 10px;
+            font-size: medium;
+            display: block;
+            margin: 1px;
+            width: 90%;
+        }
+
+            .dropdown-item:hover {
+                background-color: rgb(165, 173, 149,0.5);
+                border-radius: 20px;
+            }
+        body {
+            font-weight: bold;
+            box-sizing: border-box; /* 確保內邊距包含在總寬度中 */
+            white-space: nowrap; /* 防止文字換行 */
+            width: 100% !important;
+            background-color: #FAF4E3;
+        }
+
+        h3 {
+            margin: 10px;
+            padding: 20px 0 0 0 !important;
+            font-weight: bold !important;
+            text-align: center;
+            color: #776b5d !important;
+        }
+
+        .main {
+            /*width:1800px;*/
+            margin: 20px 50px 0px 50px !important;
+            border-radius: 18px;
+            padding: 30px;
+            /*min-width:1000px !important;*/
+        }
+
+        .box {
+            display: flex;
+            justify-content: space-between; /* 將子元素分布在容器的兩端 */
+            align-items: center; /* 垂直置中對齊 */
+            padding: 10px; /* 容器內邊距 */
+            box-sizing: border-box !important;
+        }
+
+        .boxOrderStatus {
+            display: flex;
+            align-items: center; /* 垂直置中對齊 */
+            color: rgb(96, 63, 38, 0.8) !important;
+        }
+
+        .Status {
+            font-weight: bold;
+            background-color: #F1E6D0 !important;
+            width: 150px !important;
+        }
+
+        .OrderStatus {
+            margin-left: 10px !important;
+        }
+
+        .btnbox {
+            color: white;
+            cursor: pointer; /* 鼠標懸停時顯示指針 */
+            margin-left: 5px; /* 按鈕之間的間距 */
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            background-color: rgb(133,139,120,0.5) !important;
+            color: #fefefe !important;
+            border-radius: 15px !important;
+            /*width: 120px;*/
+            font-weight: bold !important;
+            margin-right: 12px !important;
+        }
+
+        .row {
+            background-color: #F1E6D0;
+            border-radius: 18px;
+            padding: 10px;
+            font-size: small;
+            margin-top: 10px !important;
+            margin: 10px 5px 0px 5px !important;
+        }
+
+        /* 列設定 */
+        .col-md-2,
+        .col-md-3,
+        .col-md-10 {
+            color: rgb(96, 63, 38, 0.8);
+        }
+
+        .Status {
+            margin-left: 15px;
+            border-radius: 15px;
+            padding-left: 15px;
+            width: 180px;
+        }
+
+        input,
+        textarea {
+            /*background-color: ghostwhite !important;*/
+            background-color: #FAF4E3 !important;
+            color: rgb(120, 108, 93) !important;
+            border: none !important;
+            padding: 5px;
+        }
+
+        /* 表單組 */
+        .form-group {
+            gap: 1px; /* 標籤和輸入框之間的間距 */
+            margin-bottom: 5px; /* 每個表單組下面的間距 */
+        }
+
+            /* 固定寬度的標籤和輸入框 */
+            .form-group.flex-row label {
+                /*width: 150px; /* 固定標籤的寬度為150px */
+                margin: 0;
+                font-weight: bold;
+            }
+
+        .order-list {
+            /*min-width:800px;*/
+            padding: 5px !important;
+            color: #776b5d !important;
+        }
+
+
+        table {
+            border-collapse: collapse;
+            table-layout: auto; /* 讓表格根據內容自動調整列寬 */
+            width: 100% !important;
+            box-sizing: border-box; /* 確保內邊距包含在總寬度中 */
+            border: 2px solid !important;
+            border-color: rgb(205, 206, 209,0.3) !important;
+            border-radius: 10px; /* 設置圓角半徑 */
+            overflow: hidden; /* 避免內容溢出圓角 */
+        }
+
+        tr {
+            height: 50px;
+        }
+
+        th, td {
+            overflow: hidden;
+            text-overflow: ellipsis; /* 超過內容顯示省略號 */
+            padding-bottom: 2px !important;
+            padding-top: 1px !important;
+            border: 2px solid !important;
+            border-color: rgb(226, 191, 179,0.5) !important;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        td:first-child {
+            text-align: left; /* 第一列左對齊 */
+            padding: 20px;
+        }
+
+        td:not(:first-child) {
+            text-align: right; /* 第一列左對齊 */
+            padding: 10px;
+        }
+
+        td:nth-child(2) {
+            text-align: left; /* 每一行的第二欄左對齊 */
+            padding: 20px; /* 每一行的第二欄的內邊距 */
+        }
+
+        thead, tbody {
+            background-color: #F1E6D0 !important;
+            overflow: hidden !important;
+        }
+
+
+        .detail {
+            margin-top: 20px !important;
+            display: flex;
+            justify-content: space-between; /* 使左邊和右邊的內容分開 */
+            flex-direction: column; /* 訂單明細垂直排列 */
+            width: 100%;
+            font-size: small;
+            overflow-x: auto; /* 允許橫向滾動 */
+        }
+
+        .list {
+            flex: 1; /* 使兩個區塊具有相等的寬度 */
+            /*border: 1px solid #ddd;*/ /* 區塊邊框 */
+            padding: 10px; /* 區塊內邊距 */
+            box-sizing: border-box; /* 包含邊框和內邊距在內的寬度計算 */
+            overflow: auto !important; /* 顯示滾動條 */
+            border-color: none;
+            width: 100%; /* 確保列表佔據全寬 */
+        }
+
+        .title {
+            font-size: 1.25em;
+            margin-bottom: 10px; /* 標題和內容之間的間距 */
+        }
+
+        /* 預約列表容器樣式 */
+        #appointmentList {
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 15px;
+            background-color: #F1E6D0 !important;
+            color: #776b5d !important;
+            width: 100%;
+        }
+
+        /* 預約列表項目樣式 */
+        #appointmentListContent li {
+            list-style-type: none;
+            padding: 10px;
+            margin: 5px 30px 5px 5px;
+            border-radius: 15px;
+            background-color: #FAF4E3;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .Listtitle {
+            margin: 10px;
+        }
+        /* 列表項目的字體和顏色樣式 */
+        #appointmentListContent li span {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .text-red {
+            color: #D91656 !important;
+        }
+
+        .text-blue {
+            color: #4379F2 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div id="app" class="main">
+            <h3>訂單</h3>
+            <div>
+                <div class="box">
+                    <div class="boxOrderStatus">
+                        @{
+                            // 設定訂單狀態顯示文字
+                            string orderStatusText = Model.OrderStatus == 1 ? "未付款" :
+                                                     Model.OrderStatus == 2 ? "已付款" :
+                                                     Model.OrderStatus == 3 ? "待退款" :
+                                                     Model.OrderStatus == 4 ? "已退款" :
+                                                     Model.OrderStatus == 5 ? "訂單取消" : "未知狀態";
+                            // 設定狀態對應的 CSS 類別
+                            string statusClass = Model.OrderStatus == 1 ? "text-blue" :
+                                                 Model.OrderStatus == 3 ? "text-red" : "";
+                        }
+                        <label for="OrderStatus" class="OrderStatus">訂單狀態</label>
+                        @*<input type="text" id="OrderStatus" class="OrderStatus" value="@Model.OrderStatus" disabled />*@
+                        <input type="text" id="OrderStatus" class="Status @statusClass" value="@orderStatusText" disabled />
+
+                    </div>
+                    <div class="btnbox">
+                        @if (Model.OrderStatus == 1) // 未付款狀態
+                        {
+                            <button class="btn btn-orderpaid" onclick="orderpaid()">付款完成</button>
+                            <button class="btn btn-ordercancel" onclick="ordercancel()">取消訂單</button>
+                        }
+                        else if (Model.OrderStatus == 3) // 未退款狀態
+                        {
+                            <button class="btn btn-refund" onclick="refund()">退款完成</button>
+                        }
+                        @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-back" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- 第一欄 -->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="OrderID" class="mb-2">訂單號碼</label>
+                            <input type="text" id="OrderID" class="form-control" value="@Model.OrderID" disabled />
+
+                        </div>
+                        <div class="form-group">
+                            <label for="OrderDate" class="mb-2">訂單日期</label>
+                            <input type="text" id="OrderDate" class="form-control" value="@Model.OrderDate.ToString("yyyy-MM-dd")" disabled />
+                        </div>
+                    </div>
+                    <!-- 第二欄 -->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="MemberID" class="mb-2">會員ID</label>
+                            <input type="text" id="MemberID" class="form-control" value="@Model.MemberID" disabled />
+                        </div>
+                        <div class="form-group">
+                            <label for="MemberName" class="mb-2">會員姓名</label>
+                            <input type="text" id="MemberName" class="form-control" value="@Model.Name" disabled />
+                        </div>
+                    </div>
+                    <!-- 第三欄 -->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="TotalQuantity" class="mb-2">總數量</label>
+                            <input type="text" id="TotalQuantity" class="form-control" value="@Model.TotalQuantity" disabled />
+                        </div>
+                        <div class="form-group">
+                            <label for="TotalAmount" class="mb-2">總金額</label>
+                            <input type="text" id="TotalAmount" class="form-control" value="@Model.TotalAmount" disabled />
+                        </div>
+                    </div>
+                    <!-- 第四欄 -->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="DiscountedAmount" class="mb-2">折扣金額</label>
+                            <input type="text" id="DiscountedAmount" class="form-control" value="@Model.DiscountedAmount" disabled />
+                        </div>
+                        <div class="form-group">
+                            <label for="NetAmount" class="mb-2">折扣後金額</label>
+                            <input type="text" id="NetAmount" class="form-control" value="@Model.TotalNetAmount" disabled />
+                        </div>
+                    </div>
+                    <!-- 第五欄 -->
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="CancelDate" class="mb-2">取消日期</label>
+                            @*<input type="text" id="CancelDate" class="form-control" value="@Model.CancelDate?.ToString(" yyyy-MM-dd") ?? string.Empty" disabled />*@
+                            <input type="text" id="CancelDate" class="form-control" value="@((Model.CancelDate.HasValue ? Model.CancelDate.Value.ToString("yyyy-MM-dd") : string.Empty))" disabled />
+
+                        </div>
+                        <div class="form-group">
+                            <label for="SumRemainingQuantity" class="mb-2">剩餘堂數</label>
+                            <input type="text" id="SumRemainingQuantity" class="form-control" value="@Model.SumRemainingQuantity" disabled />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 訂單明細 -->
+                <div class="detail">
+                    <div class="list order-list">
+                        <table id="orderTable">
+                            <thead>
+                                <tr>
+                                    <th>明細ID</th>
+                                    <th>項目名稱</th>
+                                    <th>購買數量</th>
+                                    <th>單價</th>
+                                    <th>金額</th>
+                                    <th>折扣</th>
+                                    <th>折扣後金額</th>
+                                    <th>已使用堂數</th>
+                                    <th>剩餘堂數</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detail in Model.OrderDetails)
+                                {
+                                    <tr onclick="showAppointments(@detail.OrderDetailID)">
+                                        <td>@detail.OrderDetailID</td>
+                                        <td>@detail.ServiceName</td>
+                                        <td>@detail.Quantity</td>
+                                        <td>@detail.UnitPrice</td>
+                                        <td>@detail.Amount</td>
+                                        <td>@detail.DiscountApplied</td>
+                                        <td>@detail.NetAmount</td>
+                                        <td>@detail.UsedQuantity</td>
+                                        <td>@detail.RemainingQuantity</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="appointmentList" class="appointment-list" style="display:none;">
+                    <div class="Listtitle">預約紀錄</div>
+                    <ul id="appointmentListContent"></ul>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+function orderpaid() {
+    var orderId = @Model.OrderID;
+    $.post('/Orders/MarkOrderPaid', { orderId: orderId }, function(response) {
+        if (response.success) {
+            alert('訂單已更新為付款完成');
+            location.reload(); // 重新載入頁面或進行其他操作
+        } else {
+            alert('操作失敗，請重試');
+        }
+    });
+}
+
+function ordercancel() {
+    var orderId = @Model.OrderID;
+    $.post('/Orders/CancelOrder', { orderId: orderId }, function(response) {
+        if (response.success) {
+            alert('訂單已取消');
+            location.reload();
+        } else {
+            alert('操作失敗，請重試');
+        }
+    });
+}
+
+function refund() {
+    var orderId = @Model.OrderID;
+    $.post('/Orders/MarkOrderRefunded', { orderId: orderId }, function (response) {
+    if (response.success) {
+    alert('訂單已更新為退款完成');
+    location.reload();
+    } else {
+    alert('操作失敗，請重試');
+     }
+    });
+}
+
+
+var appointments = @Html.Raw(Json.Encode(Model.OrderDetails.Select(d => new
+{
+    OrderDetailID = d.OrderDetailID,
+    AppointmentIDs = d.AppointmentIDs,
+    AppointmentDates = d.AppointmentDates, // 假設這裡是原始字串格式
+    AppointmentStatus = d.AppointmentStatus,
+}).ToList()));
+
+function formatDate(dateString) {
+    // 使用正則表達式匹配 /Date(1725987677846)/ 格式
+    var match = dateString.match(/\/Date\((\d+)\)\//);
+    if (match) {
+        // 如果匹配成功，則將時間戳轉換為日期
+        var date = new Date(parseInt(match[1])); // 轉換為整數
+        var year = date.getFullYear();
+        var month = (date.getMonth() + 1).toString().padStart(2, '0');
+        var day = date.getDate().toString().padStart(2, '0');
+        return year + '-' + month + '-' + day;
+    } else {
+        // 處理其他格式（例如 ISO 8601 格式）
+        var datePart = dateString.split(' ')[0];
+        return datePart; // 返回 YYYY-MM-DD 格式
+    }
+}
+
+function showAppointments(orderDetailId) {
+    var selectedDetail = appointments.find(d => d.OrderDetailID === orderDetailId);
+    var appointmentListContent = document.getElementById('appointmentListContent');
+    appointmentListContent.innerHTML = '';
+
+    if (selectedDetail && selectedDetail.AppointmentIDs.length > 0) {
+        selectedDetail.AppointmentIDs.forEach(function (appointmentId, index) {
+            var listItem = document.createElement('li');
+            var appointmentDate = formatDate(selectedDetail.AppointmentDates[index]);
+            var appointmentStatus = getStatusText(selectedDetail.AppointmentStatus[index]); // 獲取狀態文字
+            listItem.textContent = `\u00A0\u00A0\u00A0\u00A0預約ID : ${appointmentId}
+            \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0 預約日期 : ${appointmentDate}
+            \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0預約狀態 : ${appointmentStatus}`;
+
+            appointmentListContent.appendChild(listItem);
+        });
+        document.getElementById('appointmentList').style.display = 'block';
+    } else {
+        appointmentListContent.innerHTML = '<li>\u00A0\u00A0沒有預約紀錄</li>';
+        document.getElementById('appointmentList').style.display = 'block';
+    }
+}
+
+// 顯示預約狀態文字，根據數字轉換為描述
+ function getStatusText(status) {
+            switch (status) {
+                case 1:
+                    return '已成立';
+                case 2:
+                    return '已取消';
+                default:
+                    return '未知';
+            }
+
+        }
+
+    </script>
+</body>
+</html>

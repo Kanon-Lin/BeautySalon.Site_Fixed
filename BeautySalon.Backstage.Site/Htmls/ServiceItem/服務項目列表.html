@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>服務項目列表</title>
+    <link rel="stylesheet" href="/Content/Css/style.css" />
+  </head>
+
+  <body>
+    <div id="navbar" class="sticky-top"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="app" class="main">
+          <!-- app叫用js -->
+          <h3>服務項目列表</h3>
+
+          <div class="search-bar">
+            <input type="text" v-model="searchTerm" placeholder="請輸入項目名稱" class="form-control" />
+          <button class="btn btn-search" @click="searchService">查詢</button>
+          <button class="btn btn-add" @click="addService">新增項目</button>
+        </div>
+          <div class="table-container">
+            <table class="table table-hover">
+              <!-- 以下內容會隨著主題不同而改變 -->
+              <thead>
+                <tr>
+                  <th style="width: 15%">項目名稱</th>
+                  <th style="width: 10%">類別</th>
+                  <th style="width: 10%">售價</th>
+                  <th style="width: 5%">時長</th>
+                  <th style="width: 40%">描述</th>
+                  <th style="width: 20%">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="service in filteredServices" :key="service.ProductId">
+                    <td class="data" style="width: 15%">{{ service.ProductName }}</td>
+                    <td class="data" style="width: 10%">{{ service.CategoryName }}</td>
+                    <td class="data" style="width: 10%">{{ service.Price }}</td>
+                    <td class="data" style="width: 5%">{{ service.Duration }}</td>
+                    <td class="data" style="width: 40%">{{ service.Description }}
+                    </td>
+                    <td class="operate" style="width: 20%">
+                        <button
+                            class="btn btn-custom"
+                            @click="editService(service.ProductId)"
+                        >
+                            編輯
+                        </button>
+                        <button
+                            class="btn btn-custom"
+                            @click="deleteService(service.ProductId)"
+                        >
+                            刪除
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/Scripts/JavaScripts/ServiceItem/serivceitemlist.js" defer></script>
+  </body>
+</html>

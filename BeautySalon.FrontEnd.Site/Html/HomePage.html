@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+            integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+            integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+            crossorigin="anonymous"></script>
+    <!--<link rel="stylesheet" href="/Css/HomePage.css" />-->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="/Css/navbar.css">
+    <script src="../JavaScript/NavbarComponent.js"></script>
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        /* 设置 section 高度 */
+        body {
+            background-color: #fcf7f2 !important;
+            color: #625e4e;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        /* 确保 carousel 占满 section 的高度 */
+        #homePagePictures {
+            height: 100%;
+        }
+
+        #ideaPic {
+            margin-bottom: 1rem; /* 控制圖片下方的距離 */
+        }
+
+        .text-content {
+            display: flex;
+            flex-direction: column; /* 纵向排列子元素 */
+            flex: 1; /* 填满剩余的宽度 */
+            padding: 1rem; /* 内边距 */
+            margin-top: -1rem; /* 根據需要調整負值 */
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: auto; /* 保持圖片的縱橫比 */
+            object-fit: cover; /* 使圖片填滿容器並保持比例 */
+        }
+
+
+        /* 确保 carousel-item 占满 carousel 的高度 */
+        .carousel-inner, .carousel-item {
+            height: 100%;
+        }
+
+            /* 使图片填充 carousel-item 的区域 */
+            .carousel-item img {
+                height: 100%;
+                object-fit: cover; /* 确保图片保持比例并覆盖整个区域 */
+            }
+
+        #studioIdea .container {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+        }
+
+        /* 确保 section 填满整个视口高度 */
+        #teamMembers {
+            /* min-height: 100vh; 确保 section 高度至少为视口高度 */
+            display: flex; /* 使用 Flexbox 布局 */
+        }
+
+        .boss-img {
+            width: 100%; /* 固定宽度，保持方形 */
+            height: 100%; /* 固定高度，保持方形 */
+            object-fit: cover; /* 确保图片覆盖整个区域 */
+            border-radius: 0.5rem; /* 圆角 */
+            margin-bottom: 20px;
+        }
+
+        .bossName {
+            font-size: 25px;
+        }
+
+        .col-md-4 {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container-fluid {
+            flex: 1; /* 使容器填满父容器的剩余空间 */
+        }
+
+        /* 确保 .row 填满容器宽度 */
+        .row {
+            flex: 1; /* 使 .row 填满容器的剩余空间 */
+            display: flex; /* 使用 Flexbox 布局 */
+            margin: 0; /* 去掉外边距 */
+            gap: 100px;
+        }
+
+        /* 确保 .col-md-8 填满剩余空间 */
+        .col-md-8 {
+            display: flex;
+            flex-direction: column; /* 纵向排列子元素 */
+            flex: 1; /* 填满剩余的宽度 */
+            padding: 1rem; /* 内边距 */
+        }
+
+        /* 确保 #employees 填满剩余空间 */
+        #employees {
+            flex: 1; /* 填满 .col-md-8 的剩余空间 */
+            display: flex;
+            flex-direction: column; /* 纵向排列每个 .employee 元素 */
+            gap: 3rem; /* 每个员工条目之间的间距 */
+            overflow-y: auto; /* 在内容溢出时显示滚动条 */
+        }
+
+        /* 确保 .employee 元素横向排列图片和文字 */
+        .employee {
+            display: flex;
+            align-items: center; /* 垂直居中对齐图片和文字 */
+            gap: 1rem; /* 图片和文字之间的间距 */
+        }
+
+        .employee-img {
+            width: 80px; /* 固定宽度，保持方形 */
+            height: 80px; /* 固定高度，保持方形 */
+            object-fit: cover; /* 确保图片覆盖整个区域 */
+            border-radius: 0.5rem; /* 圆角 */
+        }
+
+        .employee-info {
+            flex: 1; /* 文字区域占用剩余空间 */
+        }
+
+        .employee-name {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .employee-position {
+            color: #555; /* 更浅的文字颜色 */
+        }
+
+
+    
+
+        footer {
+            background-color: #b8afa6;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* 公共样式 */
+        .social-button {
+            text-decoration: none;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 30px;
+            color: #fff;
+        }
+
+            .social-button:hover {
+                color: #686059; /* 悬停时按钮变透明 */
+            }
+    </style>
+</head>
+  <body>
+      <div id="app">
+          <navbar-component></navbar-component>
+
+
+          <section id="pictures" class="mb-5">
+              <div class="container">
+                  <div id="homePagePictures"
+                       class="carousel slide"
+                       data-bs-ride="carousel">
+                      <div class="carousel-indicators">
+                          <button type="button"
+                                  data-bs-target="#carouselExampleIndicators"
+                                  data-bs-slide-to="0"
+                                  class="active"
+                                  aria-current="true"
+                                  aria-label="Slide 1"></button>
+                          <button type="button"
+                                  data-bs-target="#carouselExampleIndicators"
+                                  data-bs-slide-to="1"
+                                  aria-label="Slide 2"></button>
+                      </div>
+                      <div class="carousel-inner">
+                          <div class="carousel-item active">
+                              <img src="../images/pic01.jpg" class="d-block w-100" alt="..." />
+                          </div>
+                          <div class="carousel-item">
+                              <img src="../images/pic02.jpg" class="d-block w-100" alt="..." />
+                          </div>
+                      </div>
+                      <button class="carousel-control-prev"
+                              type="button"
+                              data-bs-target="#carouselExampleIndicators"
+                              data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                      </button>
+                      <button class="carousel-control-next"
+                              type="button"
+                              data-bs-target="#carouselExampleIndicators"
+                              data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                      </button>
+                  </div>
+              </div>
+          </section>
+
+          <section id="studioIdea" class="mb-5">
+              <div class="container">
+                  <img id="ideaPic"
+                       src="../images/pic03.jpg"
+                       alt="工作室理念圖片"
+                       class="col-md-4" />
+                  <div class="text-content col-md-8">
+                      <h3 class="mb-5 fw-bolder">工作室理念</h3>
+                      <p>
+                          我們相信，每個人都擁有獨特的美麗，而我們的使命是幫助您發掘並展現這份美麗。我們致力於提供專業且個人化的美容服務，從內到外喚醒您的自信與光彩。透過細緻的護理、最新的技術與真誠的服務，我們創造出舒適且放鬆的環境，讓您在每一次的療程中都能感受到溫暖與關懷。
+                          <br/>
+                          <br/>
+                          在這裡，美麗不僅僅是外在的展現，更是內在平靜與自我照顧的融合。我們將與您一同走過美麗旅程，讓您每次走出美容工作室時，都帶著滿滿的自信與笑容。
+                      </p>
+                  </div>
+              </div>
+          </section>
+
+          <section id="teamMembers" class="mb-5">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-md-4">
+                          <img src="../images/pic04.jpg" alt="美容師照片" class="boss-img" />
+                          <div class="bossInfo">
+                              <p class="bossName">創辦人 Victoria </p>
+                              <p class="bossDescription">
+                                  我致力於創造一個讓每位客人都能感受到自信與美麗的空間。每個人都是獨一無二的，我們的目標是幫助您發掘屬於自己的獨特之美。期待在這段美麗旅程中與您相遇！
+                              </p>
+                          </div>
+                      </div>
+                      <div class="col-md-8">
+                          <h3 class="mb-5 fw-bolder">團隊介紹</h3>
+                          <div id="employees">
+                              <div class="employee">
+                                  <img src="../images/pic05.jpg"
+                                       alt="員工照片"
+                                       class="employee-img" />
+                                  <div class="employee-info">
+                                      <p class="employee-name">小美</p>
+                                      <p class="employee-position">美甲、美睫</p>
+                                  </div>
+                              </div>
+                              <div class="employee">
+                                  <img src="../images/pic05.jpg"
+                                       alt="員工照片"
+                                       class="employee-img" />
+                                  <div class="employee-info">
+                                      <p class="employee-name">Linda</p>
+                                      <p class="employee-position">護膚、霧眉、霧唇</p>
+                                  </div>
+                              </div>
+                              <div class="employee">
+                                  <img src="../images/pic05.jpg"
+                                       alt="員工照片"
+                                       class="employee-img" />
+                                  <div class="employee-info">
+                                      <p class="employee-name">Sarah</p>
+                                      <p class="employee-position">除毛、護膚、美睫</p>
+                                  </div>
+                              </div>
+                              <div class="employee">
+                                  <img src="../images/pic05.jpg"
+                                       alt="員工照片"
+                                       class="employee-img" />
+                                  <div class="employee-info">
+                                      <p class="employee-name">妮妮</p>
+                                      <p class="employee-position">除毛、霧眉、霧唇</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </section>
+      </div>
+
+    <footer>
+        <p>
+            營業時間：早上10點至晚上8點<br />
+            地址：台北市大安區<br />
+            電話：02-1234-5678<br />
+            交通方式：捷運大安站2號出口步行3分鐘
+        </p>
+        <div class="socialMediaBtns">
+            <a href="#"
+               class="social-button instagram me-3"
+               target="_blank"
+               rel="noopener noreferrer">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+
+            <a href="#"
+               class="social-button line me-3"
+               target="_blank"
+               rel="noopener noreferrer">
+                <i class="fa-brands fa-line"></i>
+            </a>
+
+            <a href="#"
+               class="social-button facebook"
+               target="_blank"
+               rel="noopener noreferrer">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="module">
+      
+      const { createApp, ref } = Vue;
+      
+        const config = {
+            components: {
+                "navbar-component": NavbarComponent,
+            },
+        setup() {
+          const navbarRef = ref(null);
+          return {
+            navbarRef,
+          };
+        },
+      };
+      
+      const app = createApp(config);
+      
+     
+      
+      app.mount("#app");
+      </script>
+      
+  </body>
+</html>

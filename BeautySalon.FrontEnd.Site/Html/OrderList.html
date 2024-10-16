@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的訂單</title>
+    <!-- 引入 Vue.js 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- 引入其他必要的腳本和樣式 -->
+    <link rel="stylesheet" href="../Css/navbar.css" />
+    <link rel="stylesheet" href="../Css/orderlist.css" />
+    <link rel="stylesheet" href="../Css/Sidebar.css" />
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+    <script src="../JavaScript/orderService.js"></script>
+    <script src="../JavaScript/NavbarComponent.js"></script>
+    <script src="../JavaScript/SidebarComponent.js"></script>
+</head>
+<body>
+    <div id="app">
+        <navbar-component></navbar-component>
+        <div class="member-area">
+            <div class="content-wrapper">
+                <sidebar-component></sidebar-component>
+                <section class="main-content">
+                    <div class="profile-tabs">
+                        <a href="orderlist.html" class="tab-btn active">我的訂單</a>
+                    </div>
+                    <div v-if="isLoading" class="loading-message">正在載入訂單資料...</div>
+                    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+                    <div v-if="!isLoading && !errorMessage" class="order-container">
+                        <!-- 訂單表格 -->
+                        <table class="order-table">
+                            <thead>
+                                <tr>
+                                    <th @click="sortTable('OrderID')">
+                                        訂單編號
+                                        <i class="fa-solid" :class="getSortIcon('OrderID')"></i>
+                                    </th>
+                                    <th @click="sortTable('OrderDate')">
+                                        訂單日期
+                                        <i class="fa-solid" :class="getSortIcon('OrderDate')"style="margin-left:5px;"></i>
+                                    </th>
+                                    <th @click="sortTable('OrderStatus')">
+                                        訂單狀態
+                                        <i class="fa-solid" :class="getSortIcon('OrderStatus')"></i>
+                                    </th>
+                                    <th>總堂數</th>
+                                    <th>剩餘堂數</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="order in paginatedOrders" :key="order.OrderID">
+                                    <td>{{ order.OrderID }}</td>
+                                    <td>{{ formatDate(order.OrderDate) }}</td>
+                                    <td :class="getOrderStatusClass(order.OrderStatus)">{{ getOrderStatusText(order.OrderStatus) }}</td>
+                                    <td>{{ order.TotalQuantity }}</td>
+                                    <td>{{ getRemainingQuantity(order) }}</td>
+                                    <td>
+                                        <button @click="viewOrderDetails(order.OrderID)" class="view-details-btn">查看明細</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- 分頁列 -->
+                        <div class="pagination">
+                            <span v-for="page in totalPages" :key="page" class="page-item" :class="{ active: page === currentPage }">
+                                <a href="#" class="page-link" @click.prevent="changePage(page)">{{ page }}</a>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        const app = createApp({
+            components: {
+                "navbar-component": NavbarComponent,
+                "sidebar-component": SidebarComponent
+            },
+            setup() {
+                const orders = ref([]);
+                const isLoading = ref(true);
+                const errorMessage = ref('');
+                const currentPage = ref(1);
+                const itemsPerPage = ref(10); // 每頁顯示10筆資料
+                const sortColumn = ref('');
+                const sortOrder = ref(1); // 1 表示升序，-1 表示降序
+
+                const loadOrders = async () => {
+                    try {
+                        const response = await orderService.getOrders();
+                        orders.value = response;
+                    } catch (error) {
+                        console.error("Error loading orders:", error);
+                        errorMessage.value = "無法載入訂單資料，請稍後再試。";
+                    } finally {
+                        isLoading.value = false;
+                    }
+                };
+
+                const formatDate = (dateString) => {
+                    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                    return new Date(dateString).toLocaleDateString('zh-TW', options);
+                };
+
+                const getOrderStatusText = (status) => {
+                    const statusMap = {
+                        1: '未付款',
+                        2: '已付款',
+                        3: '待退款',
+                        4: '已退款',
+                        5: '已取消'
+                    };
+                    return statusMap[status] || '未知狀態';
+                };
+
+                const getOrderStatusClass = (status) => {
+                    const statusClassMap = {
+                        1: 'order-status-unpaid',
+                        2: 'order-status-paid',
+                        3: 'order-status-refunding',
+                        4: 'order-status-refunded',
+                        5: 'order-status-cancelled'
+                    };
+                    return statusClassMap[status] || '';
+                };
+
+                const getRemainingQuantity = (order) => {
+                    return order.OrderStatus === 2 ? order.SumRemainingQuantity : 0;
+                };
+
+                const viewOrderDetails = (orderId) => {
+                    window.location.href = `OrderDetail.html?id=${orderId}`;
+                };
+
+                const changePage = (page) => {
+                    currentPage.value = page;
+                };
+
+                const sortTable = (column) => {
+                    if (sortColumn.value === column) {
+                        sortOrder.value *= -1; // 切換升序和降序
+                    } else {
+                        sortColumn.value = column;
+                        sortOrder.value = 1; // 預設升序
+                    }
+                    orders.value.sort((a, b) => {
+                        if (a[column] < b[column]) return -1 * sortOrder.value;
+                        if (a[column] > b[column]) return 1 * sortOrder.value;
+                        return 0;
+                    });
+                };
+
+                const getSortIcon = (column) => {
+                    if (sortColumn.value !== column) return 'fa-sort';
+                    return sortOrder.value === 1 ? 'fa-sort-up' : 'fa-sort-down';
+                };
+
+                const paginatedOrders = computed(() => {
+                    const start = (currentPage.value - 1) * itemsPerPage.value;
+                    const end = start + itemsPerPage.value;
+                    return orders.value.slice(start, end);
+                });
+
+                const totalPages = computed(() => {
+                    return Math.ceil(orders.value.length / itemsPerPage.value);
+                });
+
+                onMounted(() => {
+                    loadOrders();
+                });
+
+                return {
+                    orders,
+                    isLoading,
+                    errorMessage,
+                    formatDate,
+                    getOrderStatusText,
+                    getOrderStatusClass,
+                    getRemainingQuantity,
+                    viewOrderDetails,
+                    changePage,
+                    sortTable,
+                    getSortIcon,
+                    paginatedOrders,
+                    totalPages,
+                    currentPage
+                };
+            }
+        });
+        app.mount("#app");
+    </script>
+</body>
+</html>

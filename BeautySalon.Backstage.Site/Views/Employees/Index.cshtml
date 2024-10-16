@@ -1,0 +1,315 @@
+﻿@model BeautySalon.Backstage.Site.Models.ViewModels.EmployeeVm
+
+@{
+    ViewBag.Title = "員工列表";
+}
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.0/dist/vue.global.js"></script>
+    <style>
+        /*共用*/
+        ul.dropdown-menu.show {
+            margin-top: 8px;
+            border: none;
+            border-radius: 0px;
+            background-color: rgb(197,207,178,1);
+        }
+
+        /* 下拉菜單 */
+        .dropdown-menu {
+            background-color: #C5CFB2;
+            padding: 0px;
+            margin: 7px 5px 5px 5px;
+            position: static;
+            top: 90%;
+            left: 0;
+            min-width: 110px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 下拉菜單項目 */
+        .dropdown-item {
+            color: #64695B;
+            font-weight: bold;
+            padding: 10px;
+            font-size: medium;
+            display: block;
+            margin: 1px;
+            width: 90%;
+        }
+
+            .dropdown-item:hover {
+                background-color: rgb(165, 173, 149,0.5);
+                border-radius: 20px;
+            }
+        .row {
+            margin: 20px 50px 50px 50px !important;
+            /*background-color: rgba(241, 243, 236, 0.7) !important;*/
+            /*background-color: rgb(254, 236, 226,0.6);*/
+            border-radius: 18px;
+        }
+
+        /*共用*/
+        h3 {
+            margin: 10px;
+            padding: 10px 0 0 0 !important;
+            font-weight: bold !important;
+            text-align: center;
+            color: #776B5D !important;
+        }
+
+        /*共用*/
+        .main {
+            padding: 30px;
+            border-radius: 18px;
+            /*background-color: rgba(241, 243, 236, 0.1) !important;*/
+            background-color: #FAF4E3;
+            
+        }
+
+        /*列表操作欄*/
+        .search-bar {
+            margin-bottom: 10px !important;
+            display: flex;
+            align-items: center;
+            margin: 20px;
+            /*width: 50%;*/
+        }
+
+
+
+        /*員工資料欄*/
+        .form-control {
+            flex: 1;
+            /*max-width: 100%;*/
+            width: 30px !important;
+            height: 100%;
+            min-height: 40px; /* 設定最小高度，根據需要調整 */
+            box-sizing: border-box; /* 确保 padding 和 border 不会增加元素的总宽度 */
+            color: #A0937D !important; /* 你可以根據需求修改顏色 */
+            margin-right: 20px;
+        }
+
+            /*列表操作欄*/
+            .form-control::placeholder {
+                color: #8E806A !important; /* 設置 placeholder 文字顏色為灰色 */
+                opacity: 1; /* 確保顏色應用於 placeholder */
+            }
+
+        .btn {
+            background-color: rgb(133,139,120,0.5) !important;
+            color: #fefefe !important;
+            border-radius: 10px !important;
+            margin: 5px;
+            font-weight: bold !important;
+            white-space:nowrap;
+        }
+
+        /*員工資料欄*/
+        .btn-custom {
+            display: flex;
+            justify-content: space-between !important;
+            align-items: center; /* 垂直置中 */
+            white-space: nowrap; /* 防止文字換行 */
+
+        }
+
+        /*列表操作欄*/
+        .table {
+            margin: 25px !important;
+            width: 95% !important;
+            border-collapse: separate;
+            border-spacing: 2px 2px; /* 設置水平間隔為 15px，垂直間隔為 10px */
+            border-radius: 10px !important;
+            overflow: hidden;
+            box-sizing: border-box !important;
+            vertical-align: middle !important; /* 垂直居中 */
+        }
+
+        /*列表操作欄*/
+        .table-container {
+            max-height: 750px;
+            /*overflow: auto;*/ /* 添加纵向滚动条 */
+            display: block;
+            width: 100%;
+            border-radius: 10px !important;
+            height: 70px;
+        }
+        /*列表操作欄*/
+        .table thead th {
+            /*background-color: rgb(218, 208, 194,0.4);*/
+            background-color: #CDD5C6;
+            text-align: center;
+            padding: 10px;
+            color: #776B5D !important;
+            margin: 2px !important;
+            white-space: nowrap;
+        }
+
+        /*列表操作欄*/
+        .table td {
+            text-align: left;
+            color: rgb(96, 63, 38,0.8) !important;
+            padding-left: 20px !important;
+            font-weight: bold;
+            height: 70px;
+            background-color: rgb(247, 249, 242,0.7) !important;
+        }
+        /*員工資料欄*/
+        .col-md-3, .col-md-5 {
+            margin-top: 40px !important;
+            color: rgb(96,63,38,0.8);
+        }
+
+        /*列表操作欄*/
+        .operate {
+            width: 100% !important;
+            text-align: center !important;
+            margin: 0px !important;
+            padding: 2px 0px 2px 0px;
+            display: flex; /* 使用 Flexbox */
+            align-items: center; /* 垂直置中 */
+            height: 70px;
+        }
+
+        /*列表操作欄*/
+        .table td.operate button {
+            margin: 0 10px !important; /* 按钮间距 */
+        }
+
+        /*員工資料欄*/
+        .text-danger {
+            min-height: 40px !important; /* 你可以根據錯誤訊息的高度進行調整 */
+            display: block !important;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="app" class="main">
+        <h3>員工列表</h3>
+
+        <div class="search-bar">
+            <input type="text" v-model="searchTerm" placeholder="請輸入員工姓名/暱稱" class="form-control" />
+            <button class="btn btn-search" v-on:click="searchEmployee">查詢</button>
+            <button class="btn btn-add" v-on:click="addEmployee">新增員工</button>
+
+        </div>
+
+        <div class="table-container">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">員工編號</th>
+                        <th style="width: 20%;">姓名</th>
+                        <th style="width: 20%;">暱稱</th>
+                        <th style="width: 10%;">性別</th>
+                        <th style="width: 20%;">電話</th>
+                        <th style="width: 20%;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="employee in filteredEmployees" :key="employee.EmployeeID">
+                        <td class="data" style="width: 10%;">{{ employee.EmployeeNo }}</td>
+                        <td class="data" style="width: 20%;">{{ employee.Name }}</td>
+                        <td class="data" style="width: 20%;">{{ employee.Nickname }}</td>
+                        <td class="data" style="width: 10%;">{{ employee.Gender === 1 ? '男' : employee.Gender === 2 ? '女' : '未知' }}</td>
+                        <td class="data" style="width: 20%;">{{ employee.Phone }}</td>
+                        <td class="operate" style="width: 20%;">
+                            <button class="btn btn-custom" v-on:click="editEmployee(employee.EmployeeID)">
+                                編輯
+                            </button>
+                            @*<button class="btn btn-custom" v-on:click="deleteEmployee(employee.EmployeeID)">
+                                    刪除
+                                </button>*@
+                            <button class="btn btn-custom" v-on:click="setEmployeeSkills(employee.EmployeeID)">
+                                設定技能
+                            </button>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+        alert("@TempData["SuccessMessage"]");
+        </script>
+    }
+    <!-- 在 <head> 或 <body> 中引入 axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    @section scripts {
+        <script>
+            const { createApp, ref, onMounted } = Vue;
+            const app = createApp({
+                setup() {
+                    const url = "/api/EmployeesApi/";
+                    const searchTerm = ref('');
+                    const employees = ref([]);
+                    const filteredEmployees = ref([]);
+
+                    onMounted(async () => {
+                        try {
+                            const response = await fetch(url);
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            const data = await response.json();
+                            /*console.log(data); // 檢查 API 返回的數據*/
+                            employees.value = data; // 員工數據
+                            filteredEmployees.value = data; // 初始化過濾後的員工列表
+                        } catch (error) {
+                            console.error("Error:", error);
+                        }
+                    });
+
+                    const searchEmployee = () => {
+                        const term = searchTerm.value.toLowerCase(); // 轉換為小寫
+                        filteredEmployees.value = employees.value.filter(emp => {
+                            return (
+                                emp.Name && emp.Name.toLowerCase().includes(term) ||
+                                emp.Nickname && emp.Nickname.toLowerCase().includes(term)
+                            );
+                        });
+                    };
+
+                    const addEmployee = () => { window.location.href = `/Employees/Create/`; };
+
+                    const editEmployee = (id) => {
+                        window.location.href = `/Employees/Edit/${id}`; // 假設有一個編輯路由
+                    };
+                    const deleteEmployee = (id) => {
+                        window.location.href = `/Employees/Delete/${id}`; // 假設有一個編輯路由
+                    };
+
+                    const setEmployeeSkills = (id) => {
+                        window.location.href = `/EmployeeSkills/SetEmpSkills?employeeID=${id}`;
+                    };
+
+
+                    return {
+                        searchTerm,
+                        employees,
+                        filteredEmployees,
+                        searchEmployee,
+                        addEmployee,
+                        editEmployee,
+                        deleteEmployee,
+                        setEmployeeSkills,
+                    };
+                }
+            });
+
+            app.mount("#app");</script>
+    }
+</body>
+</html>

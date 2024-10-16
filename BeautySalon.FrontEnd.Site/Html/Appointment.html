@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>預約頁面</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+    <script src="../JavaScript/NavbarComponent.js"></script>
+    <link href="../Css/navbar.css" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 80%;
+            margin: 0;
+            background-color: #fcf7f2;
+            color: #625e4e;
+        }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+           
+        }
+
+        main {
+            flex-grow: 1; /* 讓 main 區塊自動填滿剩餘空間 */
+        }
+        .main-content {
+            padding-top: 100px;
+            padding-left: 60px;
+            padding-right: 20px;
+            height: 800px;
+        }
+
+        .appointmentContainer {
+            display: flex;
+            /*justify-content: space-between;*/ /* 並排顯示 */
+            margin-bottom: 20px; /* 加點底部間距 */
+            gap: 25px;
+            flex: 1;
+        }
+
+        .selection-section-beautician {
+            flex: 1; /* 使每個選擇部分佔據相同的寬度 */
+            margin: 0 5px; /* 在每個選擇部分之間添加間距 */
+            padding-left: 20px;
+        }
+        .selection-section-date {
+            flex: 1; /* 使每個選擇部分佔據相同的寬度 */
+            margin: 0 5px; /* 在每個選擇部分之間添加間距 */
+        }
+        .selection-section-time {
+            flex: 1; /* 使每個選擇部分佔據相同的寬度 */
+            margin: 0 10px; /* 在每個選擇部分之間添加間距 */
+        }
+        .selection-section-info {
+            flex: 1.2; /* 使每個選擇部分佔據相同的寬度 */
+        }
+
+        .beautician {
+            display: flex;
+            flex-wrap: wrap; /* 讓多出來的按鈕自動換行 */
+        }
+
+        .beautician-button {
+            margin: 5px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            color: #625e4e;
+            border-radius: 25px;
+            display: inline-flex; /* 保持按鈕內部元素的對齊方式 */
+            justify-content: center; /* 讓按鈕文字置中 */
+        }
+
+            .beautician-button.active {
+                background-color: #e7dfd8;
+                color: #625e4e;
+            }
+
+        .time-slot-container {
+            display: flex;
+            flex-wrap: wrap; /* 允許換行 */
+            margin-top: 10px;
+        }
+        
+        .time-slot {
+            width: calc(25% - 10px); /* 每行顯示4個按鈕 */
+            margin: 5px;
+            /*padding: 10px;*/
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            color: #625e4e;
+            text-align: center; /* 使文本居中 */
+            border-radius: 25px;
+        }
+
+            .time-slot.booked {
+                background-color: #c4c4c4;
+                cursor: not-allowed;
+            }
+
+            .time-slot.active {
+                background-color: #e7dfd8;
+                color: #625e4e;
+            }
+            .time-slot.disabled {
+                background-color: #c4c4c4; /* 灰色背景表示不可選 */
+                cursor: not-allowed; /* 鼠標變成禁止符號 */
+            }
+
+        .info-container {
+            /*display: flex;
+            justify-content: space-between;*/ /* 並排顯示 */
+            margin-top: 10px; /* 增加頂部間距 */
+            gap: 50px;
+        }
+
+        .info-section {
+            flex: 1; /* 使每個信息部分佔據相同的寬度 */
+            margin: 0 10px; /* 在每個信息部分之間添加間距 */
+        }
+
+        .appointment-button button {
+            background-color: #e7dfd8;
+            color: #625e4e;
+            width: auto;
+            padding: 10px;
+            border: none;
+            position: relative;
+            bottom: 0;
+            margin: 0 10px;
+            border-radius: 25px;
+        }
+
+        .flatpickr-calendar .flatpickr-day {
+            background-color: none; /* 按鈕背景顏色 */
+            color: #625e4e; /* 按鈕字體顏色 */
+            border: none;
+        }
+
+
+            .flatpickr-calendar .flatpickr-day.selected {
+                background-color: #e7dfd8; /* 選擇的日期的背景顏色 */
+                color: #625e4e; /* 選擇的日期的字體顏色 */
+            }
+
+        .flatpickr-calendar .flatpickr-month {
+            color: #625e4e; /* 月份標題的顏色 */
+        }
+
+        .flatpickr-calendar .flatpickr-day.today {
+            background-color: none; /* 今天的日期背景顏色 */
+            color: #625e4e; /* 今天的日期字體顏色 */
+        }
+
+        /* 修改不可選擇的日期 */
+        .flatpickr-calendar .flatpickr-day.flatpickr-disabled {
+            background-color: none; /* 設定背景色 */
+            color: #c4c4c4; /* 設定文字顏色 */
+            /*cursor: not-allowed;*/ /* 顯示為禁止選擇的游標 */
+        }
+
+            /* 不可選擇的日期懸停時的樣式 */
+            .flatpickr-calendar .flatpickr-day.flatpickr-disabled:hover {
+                background-color: none; /* 懸停時的背景色 */
+                color: #c4c4c4; /* 保持文字顏色不變 */
+            }
+
+        /* 可選擇的日期懸停時的樣式 */
+        .flatpickr-calendar .flatpickr-day:not(.flatpickr-disabled):hover {
+            background-color: #e7dfd8; /* 可選日期懸停時的背景色 */
+            color: #625e4e; /* 可選日期懸停時的文字顏色 */
+        }
+
+        footer {
+            background-color: #b8afa6;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            bottom: 0;
+        }
+
+
+        .social-button {
+            text-decoration: none;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 30px;
+            color: #fff;
+        }
+
+            .social-button:hover {
+                color: #686059; /* 悬停时按钮变透明 */
+            }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <navbar-component></navbar-component>
+
+        <div class="main-content">
+            <h1 class="mb-5 fw-bolder">我要預約</h1>
+            <div class="appointmentContainer">
+                <div class="selection-section-beautician col-md-3">
+                    <h4 class="mb-2 fw-bolder">選擇美容師：</h4>
+                    <div v-for="beautician in beauticians" :key="beautician.EmployeeId" class="beautician">
+                        <button class="beautician-button"
+                                @click="selectBeautician(beautician)"
+                                :class="{ 'active': selectedBeautician === beautician }">
+                            {{ beautician.EmployeeNickname }}
+                        </button>
+                    </div>
+                </div>
+                <div class="selection-section-date col-md-3">
+                    <h4 class="mb-2 fw-bolder">選擇日期：</h4>
+                    <div id="datepicker"></div>
+                </div>
+                <div class="selection-section-time col-md-3">
+                    <h4 class="mb-2 fw-bolder">選擇時段：</h4>
+                    <div class="time-slot-container">
+                        <button v-for="slot in availableTimeSlots"
+                                :key="slot.time"
+                                @click="slot.isAvailable && selectTimeSlot(slot.time)"
+                                :class="['time-slot', { active: slot.time === selectedTimeSlot, booked: slot.isBooked, 'disabled': !slot.isAvailable }]"
+                                :disabled="!slot.isAvailable">
+                            {{ slot.time }}
+                        </button>
+
+                    </div>
+                </div>
+                <div class="selection-section-info col-md-3">
+                    <div class="info-container">
+                        <div class="info-section">
+                            <h4 class="mb-2 fw-bolder">預約資訊：</h4>
+                            <div>
+                                <p>美容師： {{ selectedBeautician?.EmployeeNickname || '' }}</p>
+                            </div>
+                            <div>
+                                <p>日期： {{ formatDate(selectedDate) }}</p>
+                            </div>
+                            <div>
+                                <p>時段： {{ selectedTimeSlot }}</p>
+                            </div>
+                            <div>
+                                <p>項目： {{ serviceDetail }}</p>
+                            </div>
+                            <div>
+                                <p>時長： {{ duration }}</p>
+                            </div>
+                        </div>
+                        <div class="appointment-button" style="margin-top: auto;">
+                            <button class="book-appointment-button" @click="bookAppointment">確認預約</button>
+                            <button class="backToOrder" @click="backToOrder">回我的訂單</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+        <footer>
+            <p>
+                營業時間：早上10點至晚上8點<br />
+                地址：台北市大安區<br />
+                電話：02-1234-5678<br />
+                交通方式：捷運大安站2號出口步行3分鐘
+            </p>
+            <div class="socialMediaBtns">
+                <a href="#" class="social-button instagram me-3" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="#" class="social-button line me-3" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-line"></i>
+                </a>
+                <a href="#" class="social-button facebook" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+            </div>
+        </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.47/dist/vue.global.prod.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+
+        const config = {
+            components: {
+                'navbar-component': NavbarComponent
+            },
+            setup() {
+                const beauticians = ref([]); // 移除靜態資料，預設為空數組
+                const selectedBeautician = ref(null); // 預設為 null
+                const selectedDate = ref(null);
+                const selectedTimeSlot = ref(null);
+                const serviceDetail = ref(null); // 儲存服務詳情
+                const duration = ref(null); // 儲存時長
+                const bookedSlots = ref([]);
+                
+
+                const availableTimeSlots = ref([]);
+                let flatpickrInstance = null;
+
+                const fetchBeauticians = async () => {
+                    try {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const orderDetailId = urlParams.get('orderDetailId');
+
+                        const response = await fetch(`/api/AppointmentApi/GetAvailableBeauticians/${orderDetailId}`, {
+                            method: 'GET', // 確保這裡是 GET
+                            headers: getAuthHeaders(),
+                        });
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        const data = await response.json();
+                        beauticians.value = data;
+                    } catch (error) {
+                        console.error('美容師資料讀取錯誤:', error);
+                    }
+                };
+                
+
+                const fetchServiceDetail = async () => {
+                    try {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const orderDetailId = urlParams.get('orderDetailId');
+
+                        const response = await fetch(`/api/AppointmentApi/GetServiceDetail/${orderDetailId}`, {
+                            method: 'GET',
+                            headers: getAuthHeaders(),
+                        });
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        const result = await response.json();
+
+                        if (result.success && result.data.length > 0) {
+                            const data = result.data[0]; // 提取數據中的第一個元素
+                            serviceDetail.value = data.ServiceName || '無項目名稱'; // 確保正確設置服務名稱
+                            duration.value = data.Duration || '無時長資料'; // 確保正確設置時長
+                        } else {
+                            console.error('未找到相應的項目資料');
+                        }
+                    } catch (error) {
+                        console.error('項目詳細資料讀取錯誤:', error);
+                    }
+                };
+
+
+
+                const selectBeautician = (beautician) => {
+                    selectedBeautician.value = beautician;
+                    selectedDate.value = null; // 重置日期
+                    selectedTimeSlot.value = null; // 重置時間段
+                    initializeFlatpickr(); // 重新初始化日曆
+                    updateAvailableTimeSlots(); // 更新可用的時間段
+                };
+
+                const selectTimeSlot = (time) => {
+                    if (!isTimeSlotBooked(time)) {
+                        selectedTimeSlot.value = time;
+                    }
+                };
+
+                const isTimeSlotBooked = (time) => {
+                    if (selectedDate.value) {
+                        const dateString = selectedDate.value.toISOString().split('T')[0];
+                        return bookedSlots.value[dateString]?.includes(time);
+                    }
+                    return false;
+                };
+
+                const isDateDisabled = (date) => {
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // 將時間設置為午夜以便於比較
+                    return date <= today;
+                };
+
+                const initializeFlatpickr = () => {
+                    if (flatpickrInstance) {
+                        flatpickrInstance.destroy(); // 銷毀舊的實例
+                    }
+
+                    flatpickrInstance = flatpickr("#datepicker", {
+                        inline: true, // 確保日曆是內嵌式顯示
+                        onChange: (selectedDates) => {
+                            if (selectedDates.length > 0) {
+                                selectedDate.value = new Date(Date.UTC(
+                                    selectedDates[0].getFullYear(),
+                                    selectedDates[0].getMonth(),
+                                    selectedDates[0].getDate()
+                                ));
+                            } else {
+                                selectedDate.value = null;
+                            }
+                            updateAvailableTimeSlots(); // 更新可用的時間段
+                        },
+                        disable: [
+                            isDateDisabled // 禁用過去的日期
+                        ],
+                        dateFormat: "Y-m-d", // 確保日期格式一致
+                    });
+                };
+
+                const formatDate = (date) => {
+                    if (!date) return ''; // 如果沒有選擇的日期，返回空字符串
+                    return new Date(date.getTime()).toLocaleDateString('zh-Hant', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    });
+                };
+
+                const fetchAvailableTimeSlots = async () => {
+                    if (!selectedBeautician.value || !selectedDate.value) {
+                        availableTimeSlots.value = []; // 如果美容師或日期未選擇，清空可用時段
+                        return;
+                    }
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const orderDetailId = urlParams.get('orderDetailId');
+
+                    const dateString = selectedDate.value.toISOString().split('T')[0];
+                    const beauticianId = selectedBeautician.value.EmployeeId; // 使用美容師 ID
+                    console.log("beauticianId", beauticianId);
+
+                    try {
+                        const response = await fetch(`/api/AppointmentApi/GetAvailableTimeSlots?beauticianId=${beauticianId}&date=${dateString}&orderDetailId=${orderDetailId}`, {
+                            method: 'GET',
+                            headers: getAuthHeaders(),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('網路回應不正常');
+                        }
+
+                        const data = await response.json();
+
+                        console.log(data); // 調試日誌，以檢查獲取的數據
+
+                        // 假設你有一個最小的預約時長，例如 30 分鐘
+                        const minimumDuration = 30; // 替換為實際的時長（分鐘）
+                        const currentTime = new Date(); // 獲取當前時間進行比較
+
+                        availableTimeSlots.value = data.map(slot => {
+                            const slotTime = new Date(`${dateString}T${slot.TimeSlot}`); // 將日期和時間結合進行比較
+                            const duration = slot.Duration; // 假設每個時段對象都有一個 Duration 屬性
+
+                            // 確定每個時段的可用性
+                            return {
+                                time: slot.TimeSlot,
+                                isBooked: slot.IsBooked,
+                                isAvailable: slot.IsAvailable && !slot.IsBooked && duration >= minimumDuration && slotTime >= currentTime
+                            };
+                        });
+                    } catch (error) {
+                        console.error('可用時段讀取錯誤:', error);
+                        availableTimeSlots.value = []; // 如果出錯，清空可用時段
+                    }
+                };
+
+
+
+                const updateAvailableTimeSlots = () => {
+                    fetchAvailableTimeSlots();
+                };
+
+                const getAuthHeaders = () => {
+                    const token = authService.getTokenFromCookie();
+                    return {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    };
+                };
+
+                const handleResponse = async (response) => {
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'API request failed');
+                    }
+                    return await response.json();
+                };
+
+                onMounted(() => {
+                    fetchBeauticians(); // 獲取美容師資料
+                    initializeFlatpickr(); // 初始化日曆
+                    updateAvailableTimeSlots(); // 更新可用的時間段
+                    fetchServiceDetail(); // 獲取服務詳情
+                });
+
+                const bookAppointment = async () => {
+    if (!selectedBeautician.value || !selectedDate.value || !selectedTimeSlot.value) {
+        alert('請選擇美容師、日期和時段!');
+        return;
+    }
+
+    const orderDetailId = new URLSearchParams(window.location.search).get('orderDetailId');
+    const appointmentData = {
+        beauticianId: selectedBeautician.value.EmployeeId,
+        duration: duration.value,
+        date: selectedDate.value.toISOString().split('T')[0],
+        timeSlot: selectedTimeSlot.value,
+        orderDetailId: orderDetailId
+    };
+
+    try {
+        const response = await fetch('/api/AppointmentApi/CreateAppointment', { 
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(appointmentData),
+        });
+
+        if (response.ok) {
+            const result = await response.json();  // 假設回應是 JSON 格式
+            console.log('Appointment Created:', result);
+            alert('預約成功!');
+            // 跳轉到預約明細頁面，假設頁面路徑是 '/appointmentDetails'
+            window.location.href = `/Html/AppointmentDetail.html`;
+        } else {
+            const errorData = await response.json();
+            console.error('Error:', errorData);
+            alert('預約失敗，請稍後再試!');
+        }
+    } catch (error) {
+        console.error('Fetch Error:', error);
+        alert('發生錯誤，請稍後再試!');
+    }
+};
+
+
+                const resetForm = () => {
+                    selectedBeautician.value = null;
+                    selectedDate.value = null;
+                    selectedTimeSlot.value = null;
+                    serviceDetail.value = null;
+                    duration.value = null;
+                    availableTimeSlots.value = [];
+                    initializeFlatpickr(); // 重新初始化日曆
+                };
+
+                const backToOrder = () => {
+    const orderId = new URLSearchParams(window.location.search).get('orderId');  // 假設URL包含orderId
+    window.location.href = `/Html/orderList.html`;  // 跳轉到訂單頁面，並附上訂單ID參數
+};
+
+                return {
+                    beauticians,
+                    selectedBeautician,
+                    selectedDate,
+                    selectedTimeSlot,
+                    availableTimeSlots,
+                    selectBeautician,
+                    selectTimeSlot,
+                    formatDate,
+                    bookAppointment,
+                    fetchServiceDetail,
+                    serviceDetail,
+                    duration,
+                    backToOrder
+                };
+            },
+        };
+
+        const app = createApp(config);
+        app.mount('#app');
+
+    </script>
+</body>
+</html>

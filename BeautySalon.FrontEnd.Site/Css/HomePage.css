@@ -1,0 +1,136 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+    /* 设置 section 高度 */
+body {
+    background-color: #fcf7f2 !important;
+}
+
+.container {
+margin-top: 50px;
+}
+
+/* 确保 carousel 占满 section 的高度 */
+#homePagePictures {
+    height: 100%;
+}
+
+#ideaPic {
+    margin-bottom: 1rem; /* 控制圖片下方的距離 */
+}
+
+.text-content {
+    display: flex;
+    flex-direction: column; /* 纵向排列子元素 */
+    flex: 1; /* 填满剩余的宽度 */
+    padding: 1rem; /* 内边距 */
+    margin-top: -1rem; /* 根據需要調整負值 */
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto; /* 保持圖片的縱橫比 */
+    object-fit: cover; /* 使圖片填滿容器並保持比例 */
+}
+
+
+/* 确保 carousel-item 占满 carousel 的高度 */
+.carousel-inner, .carousel-item {
+    height: 100%;
+}
+
+/* 使图片填充 carousel-item 的区域 */
+.carousel-item img {
+    height: 100%;
+    object-fit: cover; /* 确保图片保持比例并覆盖整个区域 */
+}
+
+    #studioIdea .container{
+      display: flex;
+      align-items: center; 
+      gap: 100px;
+    }
+
+  /* 确保 section 填满整个视口高度 */
+#teamMembers {
+  /* min-height: 100vh; 确保 section 高度至少为视口高度 */
+  display: flex; /* 使用 Flexbox 布局 */
+}
+
+.boss-img {
+  width: 100%; /* 固定宽度，保持方形 */
+  height: 100%; /* 固定高度，保持方形 */
+  object-fit: cover; /* 确保图片覆盖整个区域 */
+  border-radius: 0.5rem; /* 圆角 */
+  margin-bottom: 20px;
+}
+
+.bossName{
+  font-size: 25px;
+}
+
+.col-md-4{
+  display: flex;
+  flex-direction: column;
+}
+
+.container-fluid {
+  flex: 1; /* 使容器填满父容器的剩余空间 */
+}
+
+/* 确保 .row 填满容器宽度 */
+.row {
+  flex: 1; /* 使 .row 填满容器的剩余空间 */
+  display: flex; /* 使用 Flexbox 布局 */
+  margin: 0; /* 去掉外边距 */
+  gap: 100px;
+}
+
+/* 确保 .col-md-8 填满剩余空间 */
+.col-md-8 {
+  display: flex;
+  flex-direction: column; /* 纵向排列子元素 */
+  flex: 1; /* 填满剩余的宽度 */
+  padding: 1rem; /* 内边距 */
+}
+
+/* 确保 #employees 填满剩余空间 */
+#employees {
+  flex: 1; /* 填满 .col-md-8 的剩余空间 */
+  display: flex;
+  flex-direction: column; /* 纵向排列每个 .employee 元素 */
+  gap: 3rem; /* 每个员工条目之间的间距 */
+  overflow-y: auto; /* 在内容溢出时显示滚动条 */
+}
+
+/* 确保 .employee 元素横向排列图片和文字 */
+.employee {
+  display: flex;
+  align-items: center; /* 垂直居中对齐图片和文字 */
+  gap: 1rem; /* 图片和文字之间的间距 */
+}
+
+.employee-img {
+  width: 80px; /* 固定宽度，保持方形 */
+  height: 80px; /* 固定高度，保持方形 */
+  object-fit: cover; /* 确保图片覆盖整个区域 */
+  border-radius: 0.5rem; /* 圆角 */
+}
+
+.employee-info {
+  flex: 1; /* 文字区域占用剩余空间 */
+}
+
+.employee-name {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.employee-position {
+  color: #555; /* 更浅的文字颜色 */
+}
+
+
+    

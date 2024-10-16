@@ -1,0 +1,363 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>服務項目</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script src="../JavaScript/authService.js"></script>
+    <script src="../JavaScript/useAuth.js"></script>
+    <script src="../JavaScript/NavbarComponent.js"></script>
+    <link href="../Css/navbar.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #fcf7f2;
+            color: #625e4e;
+        }
+
+        @media (min-width: 1200px) {
+            .h2,
+            h2 {
+                font-size: 2rem;
+                font-weight: bolder;
+            }
+        }
+
+        .container {
+            padding-top: 80px;
+        }
+
+        .service-container {
+            display: flex;
+            padding: 20px;
+            gap: 100px;
+        }
+
+        .service-image {
+            width: 500px;
+            height: auto;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 150px;
+        }
+
+        .item-left {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .item-title {
+            font-size: 1.3rem;
+        }
+
+        .price-info {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+            .quantity-control button {
+                background-color: #dbb288;
+                border: none;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                font-size: 1.2rem;
+                color: #fff;
+            }
+
+        .cart-button {
+            background-color: #eaded4;
+            border: none;
+            margin-left: 10px;
+            border-radius: 15px !important;
+            font-size: 16px !important;
+            white-space: nowrap;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .floating-cart-btn {
+            width: 60px;
+            height: 60px;
+            position: fixed;
+            bottom: 170px;
+            right: 50px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: bottom 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        footer {
+            background-color: #b8afa6;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .social-button {
+            text-decoration: none;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 30px;
+            color: #fff;
+        }
+
+            .social-button:hover {
+                color: #686059;
+            }
+
+        .position-absolute {
+            margin-left: -5px; /* 向左移动10px，调整这个值以满足需求 */
+            margin-top: 8px;
+        }
+        #serviceAccordion {
+            width: 700px; /* 或指定為你需要的特定寬度，例如 400px */
+            max-width: 700px; /* 設置最大寬度 */
+            margin: 0 auto; /* 使其水平居中 */
+        }
+
+        .accordion-collapse {
+            width: 100%; /* 確保展開的內容寬度也佔滿整個容器 */
+        }
+
+        /* Accordion 按钮的基本样式 */
+        .accordion-button {
+            width: 100%; /* 使按鈕寬度佔滿整個容器 */
+            text-align: left; /* 按鈕文本左對齊 */
+            background-color: #f5e9df; /* 按鈕背景顏色 */
+            color: #9c8e81; /* 按鈕文本顏色 */
+            border: 1px solid #fff; /* 边框颜色 */
+            position: relative; /* 设置为相对定位，以便伪元素定位 */
+            font-size: 20px;
+            font-weight: bolder;
+        }
+
+        /* Accordion 按钮展开状态的样式 */
+        .accordion-button:not(.collapsed) {
+            background-color: #d1c0b0; /* 按鈕展開時的背景顏色 */
+            color: #fff; /* 展開時的文本顏色 */
+            border-color: #fff; /* 展開時的邊框顏色 */
+        }
+
+        /* Accordion 展开内容的样式 */
+        .accordion-body {
+            background-color: #f7f2ed; /* 展開內容的背景顏色 */
+            color: #69615a; /* 展開內容的文本顏色 */
+            border-color: #fff;
+        }
+
+        /* 設置按鈕的箭頭顏色（未展開） */
+        .accordion-button::after {
+            font-size: 1.5em; /* 字體大小 */
+            color: #000; /* 收起狀態下的箭頭顏色 */
+        }
+
+        /* 設置按鈕的箭頭顏色（已展開） */
+        .accordion-button:not(.collapsed)::after {
+            color: #000 !important; /* 展開狀態下的箭頭顏色 */
+
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <navbar-component></navbar-component>
+
+        <div class="container">
+            <h2 class="mb-2 ms-3 mt-3 fw-bolder">服務項目</h2>
+            <div class="service-container">
+                <div class="service-image">
+                    <img src="../images/pic06.jpg"
+                         alt="Service Image"
+                         class="img-fluid" />
+                </div>
+                <div class="accordion accordion-flush" id="serviceAccordion">
+                    <div v-for="(category, catIndex) in serviceCategories" :key="catIndex">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" :id="'heading' + catIndex">
+                                <!-- Add 'collapsed' class when the accordion is initially not expanded -->
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        :data-bs-target="'#collapse' + catIndex" aria-expanded="false"
+                                        :aria-controls="'collapse' + catIndex">
+                                    {{ category.CategoryName }}
+                                </button>
+                            </h2>
+                            <!-- Ensure the collapse class is added to ensure it's hidden initially -->
+                            <div :id="'collapse' + catIndex" class="accordion-collapse collapse" aria-labelledby="'heading' + catIndex"
+                                 data-bs-parent="#serviceAccordion">
+                                <div class="accordion-body">
+                                    <div class="item-row" v-for="(item, itemIndex) in category.Items" :key="itemIndex">
+                                        <div class="item-left me-5">
+                                            <div class="item-title">{{ item.Name }}</div>
+                                            <div class="price-info" style="font-size: 12px">
+                                                施作時間：{{ item.Duration }}分鐘 | NT$ {{ item.Price }}
+                                            </div>
+                                        </div>
+                                        <div class="quantity-control">
+                                            <button @click="decrementQuantity(catIndex, itemIndex)" class="me-3">-</button>
+                                            <span>{{ item.Quantity }}</span>
+                                            <button @click="incrementQuantity(catIndex, itemIndex)" class="ms-3 me-3">+</button>
+                                            <button class="cart-button" @click="addToCart(catIndex, itemIndex)">加入</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <button class="floating-cart-btn" @click="goToCart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span v-if="getTotalCartItems() > 0"
+                          class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-danger rounded-circle">
+                        <span class="visually-hidden">New alerts</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <p>
+                營業時間：早上10點至晚上8點<br />
+                地址：台北市大安區<br />
+                電話：02-1234-5678<br />
+                交通方式：捷運大安站2號出口步行3分鐘
+            </p>
+            <div class="socialMediaBtns">
+                <a href="#"
+                   class="social-button instagram me-3"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="#"
+                   class="social-button line me-3"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <i class="fa-brands fa-line"></i>
+                </a>
+                <a href="#"
+                   class="social-button facebook"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+
+        const app = createApp({
+            components: {
+                "navbar-component": NavbarComponent,
+            },
+            setup() {
+                const {
+                    user,
+                    isAuthenticated,
+                    getCart,
+                    addToCart: addToAuthCart,
+                    removeFromCart,
+                    updateCartItemQuantity,
+                    clearCart,
+                    getTotalCartItems,
+                    getTotalCartPrice
+                } = window.useAuth();
+
+                const serviceCategories = ref([]);
+
+                onMounted(() => {
+                    fetch("https://localhost:44346/api/ProductsApi/GetAll")
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error("Network response was not ok");
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            console.log("Fetched data:", data);
+                            serviceCategories.value = data;
+                        })
+                        .catch((error) => console.error("Error fetching data:", error));
+                });
+
+                const incrementQuantity = (catIndex, itemIndex) => {
+                    serviceCategories.value[catIndex].Items[itemIndex].Quantity++;
+                };
+
+                const decrementQuantity = (catIndex, itemIndex) => {
+                    if (serviceCategories.value[catIndex].Items[itemIndex].Quantity > 0) {
+                        serviceCategories.value[catIndex].Items[itemIndex].Quantity--;
+                    }
+                };
+
+                const addToCart = (catIndex, itemIndex) => {
+                    const item = serviceCategories.value[catIndex].Items[itemIndex];
+                    if (item.Quantity > 0) {
+                        addToAuthCart({
+                            id: item.Id,
+                            serviceName: item.Name,
+                            unitPrice: item.Price,
+                            quantity: item.Quantity,
+                        });
+                        alert(item.Name + " 已加入購物車!");
+                        item.Quantity = 0;
+                    } else {
+                        alert("請選擇數量");
+                    }
+                };
+
+                const goToCart = () => {
+                    window.location.href = "/Html/Cart.html";
+                };
+
+                return {
+                    serviceCategories,
+                    incrementQuantity,
+                    decrementQuantity,
+                    addToCart,
+                    goToCart,
+                    getTotalCartItems
+                };
+            },
+        });
+
+        app.mount("#app");
+    </script>
+</body>
+</html>

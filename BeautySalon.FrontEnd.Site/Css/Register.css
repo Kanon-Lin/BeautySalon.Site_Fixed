@@ -1,0 +1,120 @@
+﻿/* Register.css */
+
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5; /* Light background similar to your design */
+}
+
+.register-container {
+    width: 45%;
+    margin: 100px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .register-container h2 {
+        margin-bottom: 20px;
+        color: #3c3c3c;
+        font-weight: 700;
+    }
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #3c3c3c;
+    font-weight: 600;
+}
+
+input.form-control {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
+
+.form-container {
+    position: relative;
+    padding-bottom: 50px; /* 為底部的按鈕留出空間 */
+}
+
+.btn-register {
+    display: block;
+    width: 40%;
+    margin: 20px auto 0;
+    padding: 10px;
+    background-color: #e0ded9;
+    color: #3c3c3c;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+}
+
+    .btn-register:hover {
+        background-color: #d2d0cb;
+    }
+
+.btn-auto-fill {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 8px 15px;
+    background-color: white;
+    color: #333;
+    border: 2px solid #333;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+    .btn-auto-fill:hover {
+        background-color: #f0f0f0;
+        border-color: #555;
+    }
+
+    .btn-auto-fill:hover {
+        background-color: #f0f0f0;
+        border-color: #555;
+        }
+
+
+        /*.button .btn-primary {
+    display:flex;
+    width: 40%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #e0ded9;*/ /* 按鈕顏色 */
+    /*color: #3c3c3c;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+    margin: 0 auto;
+}
+
+    button.btn-primary:hover {
+        background-color: #d2d0cb;*/ /* 當滑鼠懸停時的顏色變化 */
+    /*}*/
+
+.error-message {
+    color: #dc3545; /* 錯誤訊息顏色 */
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}

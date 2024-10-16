@@ -1,0 +1,28 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+footer {
+  background-color: #b8afa6;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+}
+
+/* 公共样式 */
+.social-button {
+  text-decoration: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 30px;
+  color: #fff;
+}
+.social-button:hover {
+  color: #686059; /* 悬停时按钮变透明 */
+}

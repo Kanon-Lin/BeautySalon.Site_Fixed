@@ -1,0 +1,290 @@
+/* navbar.css */
+.main-header {
+    background-color: rgba(182, 139, 94, 0.95);
+    width: 100%;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-hidden {
+    transform: translateY(-100%);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    flex-wrap: nowrap;
+    height: 70px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo-link {
+    display: block;
+}
+
+.logo {
+    width: 130px;
+    height: auto;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-item {
+    color: #fff;
+    font: 600 16px "Arial", sans-serif;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+    .nav-item::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #fff;
+        transition: width 0.3s ease-in-out;
+    }
+
+    .nav-item:hover {
+        color: #fdf3d4;
+    }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+.user-info {
+    position: relative;
+}
+
+.user-greeting {
+    color: #fff;
+    font: 600 16px "Arial", sans-serif;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: transparent;
+    color: #fff;
+    border-radius: 25px;
+    padding: 8px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    overflow: hidden;
+    position: relative;
+}
+
+    .auth-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient( 120deg, transparent, rgba(255, 255, 255, 0.2), transparent );
+        transition: all 0.6s;
+    }
+
+    .auth-btn:hover::before {
+        left: 100%;
+    }
+
+    .auth-btn .btn-text {
+        z-index: 1;
+        transition: transform 0.3s ease;
+    }
+
+    .auth-btn .btn-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .auth-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: #fff;
+    }
+
+        .auth-btn:hover .btn-text {
+            transform: translateX(-3px);
+        }
+
+        .auth-btn:hover .btn-icon {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+.login-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.register-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.logout-btn {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+    .logout-btn:hover {
+        background-color: rgba(255, 255, 255, 0.25);
+    }
+
+.logout-icon {
+    width: 16px;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+/* 下拉 */
+.nav-item.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 180px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+    transform: translateY(10px);
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    font: 500 14px "Arial", sans-serif;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease;
+}
+
+    .dropdown-item:hover {
+        background-color: #f5f5f5;
+        color: #b68b5e;
+    }
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .navbar {
+        justify-content: space-between;
+        padding: 0 20px;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        flex-direction: column;
+        background-color: rgba(182, 139, 94, 0.95);
+        width: 100%;
+        align-items: flex-start;
+        padding: 20px;
+        display: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar.expanded .nav-links {
+        display: flex;
+    }
+
+    .nav-item {
+        padding: 10px 0;
+    }
+
+    .user-actions {
+        display: flex;
+        align-items: center;
+    }
+
+    .hamburger-menu {
+        display: block;
+        cursor: pointer;
+        margin-right: 15px;
+    }
+
+        .hamburger-menu span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+    .navbar.expanded .hamburger-menu span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .navbar.expanded .hamburger-menu span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .navbar.expanded .hamburger-menu span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+
+    .auth-buttons {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .auth-btn {
+        font-size: 13px;
+        padding: 6px 15px;
+    }
+
+        .auth-btn .btn-icon {
+            width: 20px;
+            height: 20px;
+        }
+}
